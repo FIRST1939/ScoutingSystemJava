@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="C:/Users/Grayson Spidle/Eclipse Workspaces/The Java Scouting System/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Grayson Spidle/Eclipse Workspaces/The Java Scouting System/lib/jinput-2.0.5.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="The Java Scouting System/lib/natives"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Grayson Spidle/Eclipse Workspaces/The Java Scouting System/lib/jinput-2.0.5-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Grayson Spidle/Eclipse Workspaces/The Java Scouting System/lib/jinput-test.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Grayson Spidle/Eclipse Workspaces/The Java Scouting System/lib/plugins"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
