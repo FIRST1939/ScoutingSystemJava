@@ -208,10 +208,6 @@ public class ControllerTest {
 		else if (rightStick == DOWN) System.out.println("Right Stick: Down");
 		else if (rightStick == LEFT) System.out.println("Right Stick: Left");
 		else if (rightStick == RIGHT) System.out.println("Right Stick: Right");
-		else if (rightStick == UP_LEFT) System.out.println("Right Stick: Up Left");
-		else if (rightStick == UP_RIGHT) System.out.println("Right Stick: Up Right");
-		else if (rightStick == DOWN_LEFT) System.out.println("Right Stick: Down Left");
-		else if (rightStick == DOWN_RIGHT) System.out.println("Right Stick: Down Right");
 		else if (rightStick == ERROR) System.out.println("Right Stick: Error");
 		System.out.println();
 	}
