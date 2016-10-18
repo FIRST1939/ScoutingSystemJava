@@ -1,8 +1,8 @@
-package main;
+package com.frcteam1939.scouting.api;
+
+import com.frcteam1939.scouting.api.controllers.JInputJoystick;
 
 import net.java.games.input.*;
-import elements.JInputJoystick;
-import elements.UI;
 
 public class Main {
 	

@@ -1,4 +1,6 @@
-package elements;
+package com.frcteam1939.scouting.api.controllers;
+import com.frcteam1939.scouting.api.UI;
+
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;

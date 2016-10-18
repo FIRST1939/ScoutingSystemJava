@@ -1,4 +1,4 @@
-package elements;
+package com.frcteam1939.scouting.api.controllers;
 
 import java.util.ArrayList;
 import net.java.games.input.Component;

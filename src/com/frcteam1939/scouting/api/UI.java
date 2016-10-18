@@ -1,4 +1,4 @@
-package elements;
+package com.frcteam1939.scouting.api;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
