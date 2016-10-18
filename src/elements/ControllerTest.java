@@ -1,40 +1,101 @@
 package elements;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 public class ControllerTest {
 	
-	static final int ERROR = -1;
-	static final int NEUTRAL = 0;
-	static final int UP = 1;
-	static final int DOWN = 2;
-	static final int LEFT = 3;
-	static final int RIGHT = 4;
-	static final int UP_LEFT = 5;
-	static final int UP_RIGHT = 6;
-	static final int DOWN_LEFT = 7;
-	static final int DOWN_RIGHT = 8;
+	Controller controller;
 	
-	static boolean aButton = false; 
-	static boolean bButton = false;
-	static boolean xButton = false;
-	static boolean yButton = false;
-	static boolean lb = false;
-	static boolean rb = false;
-	static boolean back = false;
-	static boolean start = false;
-	static boolean ls = false;
-	static boolean rs = false;
+	private static final int ERROR = -1;
+	private static final int NEUTRAL = 0;
+	private static final int UP = 1;
+	private static final int DOWN = 2;
+	private static final int LEFT = 3;
+	private static final int RIGHT = 4;
 	
-	static boolean lt = false;
-	static boolean rt = false;
+	private static boolean aButton = false; 
+	private static boolean bButton = false;
+	private static boolean xButton = false;
+	private static boolean yButton = false;
+	private static boolean lb = false;
+	private static boolean rb = false;
+	private static boolean back = false;
+	private static boolean start = false;
+	private static boolean ls = false;
+	private static boolean rs = false;
 	
-	static int leftStick = NEUTRAL;
-	static int rightStick = NEUTRAL;
+	private static boolean lt = false;
+	private static boolean rt = false;
+	
+	private static int leftStick = NEUTRAL;
+	private static int rightStick = NEUTRAL;
+	
+	private static boolean previousaButton = aButton; 
+	private static boolean previousbButton = bButton;
+	private static boolean previousxButton = xButton;
+	private static boolean previousyButton = yButton;
+	private static boolean previouslb = lb;
+	private static boolean previousrb = rb;
+	private static boolean previousback = back;
+	private static boolean previousstart = start;
+	private static boolean previousls = ls;
+	private static boolean previousrs = rs;
+	
+	private static boolean previouslt = lt;
+	private static boolean previousrt = rt;
+	
+	private static int previousLeftStick = leftStick;
+	private static int previousRightStick = rightStick;
+	
+	
 	
 	static boolean value = false;
 	
 	static boolean doPolling = true;
+	
+	static UIV2 ui;
+	
+	public ControllerTest(Controller arg0) {
+		
+		controller = arg0;
+		aButton = false; 
+		bButton = false;
+		xButton = false;
+		yButton = false;
+		lb = false;
+		rb = false;
+		back = false;
+		start = false;
+		ls = false;
+		rs = false;
+		
+		lt = false;
+		rt = false;
+		
+		leftStick = NEUTRAL;
+		rightStick = NEUTRAL;
+		
+		previousaButton = aButton;
+		previousbButton = bButton;
+		previousxButton = xButton;
+		previousyButton = yButton;
+		previouslb = lb;
+		previousrb = rb;
+		previousback = back;
+		previousstart = start;
+		previousls = ls;
+		previousrs = rs;
+		
+		previouslt = lt;
+		previousrt = rt;
+		
+		previousLeftStick = leftStick;
+		previousRightStick = rightStick;
+		
+	}
 	
 	public static Controller[] getAllControllers() {
 		
@@ -87,12 +148,15 @@ public class ControllerTest {
 		
 	}
 
-	public static void pollController(Controller c) {
+	/**
+	 * Call this method to get controller input (does not contain a loop)
+	 */
+	public void pollController() {
 		
-		doPolling = true;
-		while (doPolling) {
-			c.poll();
-			Component[] components = c.getComponents();
+		rememberVariables();
+//		while(doPolling) {
+			controller.poll();
+			Component[] components = controller.getComponents();
 			for (int i = 0; i < components.length; i++) {
 				
 				boolean isAnalog = components[i].isAnalog();
@@ -171,7 +235,7 @@ public class ControllerTest {
 				
 				setButtonValues.run();
 				
-				outputAllVariables();
+//				outputAllVariables();
 				
 			}
 
@@ -180,10 +244,10 @@ public class ControllerTest {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
+//		}
 	}
 	
-	public static void outputAllVariables() {
+	private static void outputAllVariables() {
 		System.out.println();
 		System.out.println("A: " + aButton);
 		System.out.println("B: " + bButton);
@@ -212,18 +276,122 @@ public class ControllerTest {
 		System.out.println();
 	}
 	
-	public static void stopPolling() {
-		doPolling = false;
+	private static void rememberVariables() {
+		
+		previousaButton = aButton;
+		previousbButton = bButton;
+		previousxButton = xButton;
+		previousyButton = yButton;
+		previouslb = lb;
+		previousrb = rb;
+		previousback = back;
+		previousstart = start;
+		previousls = ls;
+		previousrs = rs;
+		
+		previouslt = lt;
+		previousrt = rt;
+		
+		previousLeftStick = leftStick;
+		previousRightStick = rightStick;
+		
 	}
+	
+	public boolean isAButton() {
+		if (!aButton && previousaButton) return true;
+		else return false;
+	}
+
+	public static boolean isbButton() {
+		if (!bButton && previousbButton) return true;
+		else return false;
+	}
+
+	public static boolean isxButton() {
+		if (!xButton &&previousxButton) return true;
+		else return false;
+	}
+
+	public static boolean isyButton() {
+		if (!yButton &&previousyButton) return true;
+		else return false;
+	}
+
+	public static boolean isLb() {
+		if (!lb &&previouslb) return true;
+		else return false;
+	}
+
+	public static boolean isRb() {
+		if (!rb &&previousrb) return true;
+		else return false;	
+	}
+
+	public static boolean isBack() {
+		if (!back &&previousback) return true;
+		else return false;
+	}
+
+	public static boolean isStart() {
+		if (!start &&previousstart) return true;
+		else return false;
+	}
+
+	public static boolean isLS() {
+		if (!ls &&previousls) return true;
+		else return false;
+	}
+
+	public static boolean isRS() {
+		if (!rs &&previousrs) return true;
+		else return false;
+	}
+
+	public static boolean isLt() {
+		return lt;
+	}
+
+	public static boolean isRt() {
+		return rt;
+	}
+
+	public static int getLeftStick() {
+		return leftStick;
+	}
+
+	public static int getRightStick() {
+		return rightStick;
+	}
+
+	public static boolean isValue() {
+		return value;
+	}
+
+	public static boolean isDoPolling() {
+		return doPolling;
+	}
+	
 	
 	public static void main(String[] args) {
 		
-		UI ui = new UI();
+		ui = new UIV2();
+		ui.setVisible(true);
 		Controller[] controllers = getAllControllersOfType(Controller.Type.GAMEPAD);
 		System.out.println(controllers.length);
-		pollController(controllers[0]);
-		stopPolling();
+		ControllerTest test = new ControllerTest(controllers[0]);
 		
+		int value = 0;
+		boolean prev = false;
+		boolean now = false;
+		
+		while (true) {
+			
+			test.pollController();
+			if (test.isAButton()) ui.score1Field.setText("" + ++value);
+			if (test.isbButton()) ui.score1Field.setText("" + value*2);
+			
+		}
+				
 	}
 	
 }
