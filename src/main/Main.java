@@ -1,80 +1,85 @@
 package main;
 
 import net.java.games.input.*;
-import elements.JInputJoystick;
-import elements.UI;
+
+import java.util.Vector;
+
+import elements.ControllerTest;
+import elements.UIV2;
 
 public class Main {
-	
-	/**
-	 * I'm just messing around with this
-	 * @param controllerType
-	 */
-	public static void pollControllerAndItsComponents(Controller.Type controllerType) {
-		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
-
-		// First controller of the desired type.
-		Controller firstController = null;
-
-		for (int i = 0; i < controllers.length && firstController == null; i++) {
-			if (controllers[i].getType() == controllerType) {
-				// Found a controller
-				firstController = controllers[i];
-				break;
-			}
-		}
-
-		if (firstController == null) {
-			// Couldn't find a controller
-			System.out.println("Found no desired controller!");
-			System.exit(0);
-		}
-
-		System.out.println("First controller of a desired type is: " + firstController.getName());
-
-		while (true) {
-			firstController.poll();
-			Component[] components = firstController.getComponents();
-			StringBuffer buffer = new StringBuffer();
-			for (int i = 0; i < components.length; i++) {
-				if (i > 0) {
-					buffer.append(", ");
-				}
-				buffer.append(components[i].getName());
-				buffer.append(": ");
-				if (components[i].isAnalog()) {
-					buffer.append(components[i].getPollData());
-				} else {
-					if (components[i].getPollData() == 1.0f) {
-						buffer.append("On");
-					} else {
-						buffer.append("Off");
-					}
-				}
-			}
-			System.out.println(buffer.toString());
-
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public static void main(String[] args) {
 		
-		UI ui = new UI();
-		JInputJoystick test = new JInputJoystick(Controller.Type.GAMEPAD);
-//		pollControllerAndItsComponents(test.getControllerType());
-		System.out.println();
-		System.out.println(test.getControllerName());
-		System.out.println("Number of Buttons: " + test.getNumberOfButtons());
-		System.out.println("XAxisPercentage: " + test.getXAxisPercentage());
-		System.out.println("YAxisPercentage: " + test.getYAxisPercentage());
-		System.out.println("Button Values: " + test.getButtonsValues());
+		UIV2 ui = new UIV2();
+		ui.setVisible(true);
+		Controller[] controllers = getAllControllersOfType(Controller.Type.GAMEPAD);
+		Vector<ControllerTest> testers = new Vector<ControllerTest>();
+		
+		for (int i = 0; i > 6; i++) testers.add(new ControllerTest(controllers[i])); // Gather all the connected controllers
+		
+		while (true) {
+			
+			for (ControllerTest ct : testers) {
+				
+				ct.pollControllerInput();
+				
+//				**** CONTROLS ****
+				if (ct.isAButton()) /*do stuff*/;
+				if (ct.isbButton()) /*do stuff*/;
+//				**** END OF CONTROLS ****
+				
+			}
+			
+		}
 		
 
+	}
+	
+	public static Controller[] getAllControllersOfType(Controller.Type controllerType) {
+		
+		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		Controller[] temp = new Controller[controllers.length];
+		int outputLength = 0;
+		Controller[] output = new Controller[outputLength];
+		int i2 = 0;
+		
+		for (int i = 0; i < controllers.length; i++) {
+			if (controllers[i].getType() == controllerType) {
+				// Found a controller
+				temp[i2] = controllers[i];
+				i2++;
+			}
+		}
+		
+		// Finds how many elements in temp are not null
+		for (int i = 0; i < temp.length; i++) {
+			
+			if (temp[i] != null) {
+				
+				outputLength++;
+				
+			}
+			
+		}
+		
+		i2 = 0;
+		output = new Controller[outputLength];
+		
+		// Adds all elements from temp to output (that aren't null)
+		for (int i = 0; i < temp.length; i++) {
+			
+			if (temp[i] != null) {
+				
+				output[i2] = temp[i];
+				i2++;
+				
+			}
+			
+		}
+		
+		return output;
+		
 	}
 
 }

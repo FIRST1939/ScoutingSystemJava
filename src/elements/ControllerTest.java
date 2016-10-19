@@ -102,56 +102,11 @@ public class ControllerTest {
 		return ControllerEnvironment.getDefaultEnvironment().getControllers();		
 	}
 	
-	public static Controller[] getAllControllersOfType(Controller.Type controllerType) {
-		
-		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
-		Controller[] temp = new Controller[controllers.length];
-		int outputLength = 0;
-		Controller[] output = new Controller[outputLength];
-		int i2 = 0;
-		
-		for (int i = 0; i < controllers.length; i++) {
-			if (controllers[i].getType() == controllerType) {
-				// Found a controller
-				temp[i2] = controllers[i];
-				i2++;
-			}
-		}
-		
-		// Finds how many elements in temp are not null
-		for (int i = 0; i < temp.length; i++) {
-			
-			if (temp[i] != null) {
-				
-				outputLength++;
-				
-			}
-			
-		}
-		
-		i2 = 0;
-		output = new Controller[outputLength];
-		
-		// Adds all elements from temp to output (that aren't null)
-		for (int i = 0; i < temp.length; i++) {
-			
-			if (temp[i] != null) {
-				
-				output[i2] = temp[i];
-				i2++;
-				
-			}
-			
-		}
-		
-		return output;
-		
-	}
 
 	/**
 	 * Call this method to get controller input (does not contain a loop)
 	 */
-	public void pollController() {
+	public void pollControllerInput() {
 		
 		rememberVariables();
 //		while(doPolling) {
@@ -247,7 +202,7 @@ public class ControllerTest {
 //		}
 	}
 	
-	private static void outputAllVariables() {
+	private static void outputAllVariablesInConsole() {
 		System.out.println();
 		System.out.println("A: " + aButton);
 		System.out.println("B: " + bButton);
@@ -302,96 +257,67 @@ public class ControllerTest {
 		else return false;
 	}
 
-	public static boolean isbButton() {
+	public boolean isbButton() {
 		if (!bButton && previousbButton) return true;
 		else return false;
 	}
 
-	public static boolean isxButton() {
+	public boolean isxButton() {
 		if (!xButton &&previousxButton) return true;
 		else return false;
 	}
 
-	public static boolean isyButton() {
+	public boolean isyButton() {
 		if (!yButton &&previousyButton) return true;
 		else return false;
 	}
 
-	public static boolean isLb() {
+	public boolean isLb() {
 		if (!lb &&previouslb) return true;
 		else return false;
 	}
 
-	public static boolean isRb() {
+	public boolean isRb() {
 		if (!rb &&previousrb) return true;
 		else return false;	
 	}
 
-	public static boolean isBack() {
+	public boolean isBack() {
 		if (!back &&previousback) return true;
 		else return false;
 	}
 
-	public static boolean isStart() {
+	public boolean isStart() {
 		if (!start &&previousstart) return true;
 		else return false;
 	}
 
-	public static boolean isLS() {
+	public boolean isLS() {
 		if (!ls &&previousls) return true;
 		else return false;
 	}
 
-	public static boolean isRS() {
+	public boolean isRS() {
 		if (!rs &&previousrs) return true;
 		else return false;
 	}
 
-	public static boolean isLt() {
-		return lt;
+	public boolean isLt() {
+		if (!lt && previouslt) return true;
+		else return false;
 	}
 
-	public static boolean isRt() {
-		return rt;
+	public boolean isRt() {
+		if (!rt && previousrt) return true;
+		else return false;
 	}
 
-	public static int getLeftStick() {
+	public int getLeftStick() {
 		return leftStick;
 	}
 
-	public static int getRightStick() {
+	public int getRightStick() {
 		return rightStick;
-	}
-
-	public static boolean isValue() {
-		return value;
-	}
-
-	public static boolean isDoPolling() {
-		return doPolling;
-	}
-	
-	
-	public static void main(String[] args) {
-		
-		ui = new UIV2();
-		ui.setVisible(true);
-		Controller[] controllers = getAllControllersOfType(Controller.Type.GAMEPAD);
-		System.out.println(controllers.length);
-		ControllerTest test = new ControllerTest(controllers[0]);
-		
-		int value = 0;
-		boolean prev = false;
-		boolean now = false;
-		
-		while (true) {
-			
-			test.pollController();
-			if (test.isAButton()) ui.score1Field.setText("" + ++value);
-			if (test.isbButton()) ui.score1Field.setText("" + value*2);
-			
-		}
-				
 	}
 	
 }
