@@ -1,55 +1,44 @@
 package elements;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.GridLayout;
 import java.awt.Color;
-import javax.swing.border.LineBorder;
-import javax.swing.JLabel;
-import java.awt.FlowLayout;
-import javax.swing.JTextField;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JCheckBox;
-import java.awt.Window.Type;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
-
-import javax.swing.BoxLayout;
 import java.awt.Component;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import com.jgoodies.forms.layout.RowSpec;
+import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Frame;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 public class UIV2 extends JFrame {
 
-	private JPanel contentPane;
+	public RobotPanel robot1;
+	public RobotPanel robot2;
+	public RobotPanel robot3;
+	public RobotPanel robot4;
+	public RobotPanel robot5;
+	public RobotPanel robot6;
 	
-	private JPanel autonomousPanel;
+	public JMenuBar menuBar;
 	
-	public static AutonomousRobotPanel autonomousRobot1;
-	public static AutonomousRobotPanel autonomousRobot2;
-	public static AutonomousRobotPanel autonomousRobot3;
-	public static AutonomousRobotPanel autonomousRobot4;
-	public static AutonomousRobotPanel autonomousRobot5;
-	public static AutonomousRobotPanel autonomousRobot6;
+	public JMenu menuExport;
+	public JMenu menuCompetition;
+	
+	public JMenuItem itemStartMatch;
+	public JMenuItem itemReset;
+	public JMenuItem itemToCSV;
+	
+	public static JPanel contentPane = new JPanel();
 
 	/**
 	 * Create the frame. Is not initially set to be visible
@@ -66,68 +55,67 @@ public class UIV2 extends JFrame {
 		setAlwaysOnTop(true);
 		setTitle("Scouting Program");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(-6, 0, widthOfScreen, heightOfScreen);
+		setBounds(0, 0, widthOfScreen, heightOfScreen);
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnCompetition = new JMenu("Competition");
-		mnCompetition.setHorizontalAlignment(SwingConstants.CENTER);
-		menuBar.add(mnCompetition);
+		menuCompetition = new JMenu("Competition");
+		menuCompetition.setHorizontalAlignment(SwingConstants.CENTER);
+		menuBar.add(menuCompetition);
 		
-		JMenuItem mntmStartMatch = new JMenuItem("Start Match");
-		mntmStartMatch.setHorizontalAlignment(SwingConstants.CENTER);
-		mnCompetition.add(mntmStartMatch);
+		itemStartMatch = new JMenuItem("Start Match");
+		itemStartMatch.setHorizontalAlignment(SwingConstants.CENTER);
+		menuCompetition.add(itemStartMatch);
 		
-		JMenuItem mntmReset = new JMenuItem("Reset");
-		mnCompetition.add(mntmReset);
+		itemReset = new JMenuItem("Reset");
+		menuCompetition.add(itemReset);
 		
-		JMenu mnExport = new JMenu("Export");
-		menuBar.add(mnExport);
+		menuExport = new JMenu("Export");
+		menuBar.add(menuExport);
 		
-		JMenuItem mntmTocsv = new JMenuItem("to .csv");
-		mnExport.add(mntmTocsv);
+		itemToCSV = new JMenuItem("to .csv");
+		menuExport.add(itemToCSV);
 		
-		autonomousRobot1 = new AutonomousRobotPanel("Team 1", Color.RED);
-		autonomousRobot2 = new AutonomousRobotPanel("Team 2", Color.RED);
-		autonomousRobot3 = new AutonomousRobotPanel("Team 3", Color.RED);
-		autonomousRobot4 = new AutonomousRobotPanel("Team 4", Color.BLUE);
-		autonomousRobot5 = new AutonomousRobotPanel("Team 5", Color.BLUE);
-		autonomousRobot6 = new AutonomousRobotPanel("Team 6", Color.BLUE);
+		robot1 = new RobotPanel("Team 1", Color.RED);
+			robot1.setTabPlacement(JTabbedPane.TOP);
+		robot2 = new RobotPanel("Team 2", Color.RED);
+			robot2.setTabPlacement(JTabbedPane.TOP);
+		robot3 = new RobotPanel("Team 3", Color.RED);
+			robot3.setTabPlacement(JTabbedPane.TOP);
+		robot4 = new RobotPanel("Team 4", Color.BLUE);
+			robot4.setTabPlacement(JTabbedPane.BOTTOM);
+		robot5 = new RobotPanel("Team 5", Color.BLUE);
+			robot5.setTabPlacement(JTabbedPane.BOTTOM);
+		robot6 = new RobotPanel("Team 6", Color.BLUE);
+			robot6.setTabPlacement(JTabbedPane.BOTTOM);
+			
+		contentPane.setLayout(new GridLayout(2, 3, 1, 1));
+		contentPane.add(robot1);
+		contentPane.add(robot2);
+		contentPane.add(robot3);
+		contentPane.add(robot4);
+		contentPane.add(robot5);
+		contentPane.add(robot6);
 		
-		autonomousPanel = new JPanel();
-			autonomousPanel.setLayout(new GridLayout(0, 3, 1, 1));
-			autonomousPanel.add(autonomousRobot1);
-			autonomousPanel.add(autonomousRobot2);
-			autonomousPanel.add(autonomousRobot3);
-			autonomousPanel.add(autonomousRobot4);
-			autonomousPanel.add(autonomousRobot5);
-			autonomousPanel.add(autonomousRobot6);
-		
-		contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		try {
-			changeContentPane(autonomousPanel);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.err.println("Unable to display the autonomousPanel");
-			System.exit(0);
-		}
+		this.setContentPane(contentPane);
 		
 	}
 	
 	/**
-	 * Used to change the content pane between autonomous and teleoperated panels
-	 * @param arg0 Either put in the autonomousPanel or teleoperatedPanel
-	 * @throws ArrayIndexOutOfBoundsException Throws this exception if arg0 does not have 6 elements (recommended not to have more because they won't be used)
+	 * Gets RobotPanel
+	 * @param index Valid numbers are 0-5
+	 * @return Retruns a RobotPanel. Returns null if you put any value other than 0-5.
 	 */
-	private void changeContentPane(JPanel arg0) throws ArrayIndexOutOfBoundsException {
-		try {
-			arg0.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{arg0.getComponent(0), arg0.getComponent(1), arg0.getComponent(2), arg0.getComponent(3), arg0.getComponent(4), arg0.getComponent(5)}));
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new ArrayIndexOutOfBoundsException();
-		}
-		contentPane = arg0;
-		setContentPane(contentPane);
+	public RobotPanel getRobotPanel(int index) {
+		
+		if (index==0) return robot1;
+		else if (index==1) return robot2;
+		else if (index==2) return robot3;
+		else if (index==3) return robot4;
+		else if (index==4) return robot5;
+		else if (index==5) return robot6;
+		else return null;
+		
 	}
 }
