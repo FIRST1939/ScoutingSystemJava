@@ -1,60 +1,125 @@
 package elements;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
+
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 public class ControllerTest {
 	
-	static final int ERROR = -1;
-	static final int NEUTRAL = 0;
-	static final int UP = 1;
-	static final int DOWN = 2;
-	static final int LEFT = 3;
-	static final int RIGHT = 4;
-	static final int UP_LEFT = 5;
-	static final int UP_RIGHT = 6;
-	static final int DOWN_LEFT = 7;
-	static final int DOWN_RIGHT = 8;
+	Controller controller;
 	
-	static boolean aButton = false; 
-	static boolean bButton = false;
-	static boolean xButton = false;
-	static boolean yButton = false;
-	static boolean lb = false;
-	static boolean rb = false;
-	static boolean back = false;
-	static boolean start = false;
-	static boolean ls = false;
-	static boolean rs = false;
+	public static final int ANALOG_ERROR = -1;
+	public static final int ANALOG_NEUTRAL = 0;
+	public static final int ANALOG_UP = 1;
+	public static final int ANALOG_DOWN = 2;
+	public static final int ANALOG_LEFT = 3;
+	public static final int ANALOG_RIGHT = 4;
 	
-	static boolean lt = false;
-	static boolean rt = false;
+	private static boolean aButton = false; 
+	private static boolean bButton = false;
+	private static boolean xButton = false;
+	private static boolean yButton = false;
+	private static boolean lb = false;
+	private static boolean rb = false;
+	private static boolean back = false;
+	private static boolean start = false;
+	private static boolean ls = false;
+	private static boolean rs = false;
 	
-	static int leftStick = NEUTRAL;
-	static int rightStick = NEUTRAL;
+	private static boolean lt = false;
+	private static boolean rt = false;
+	
+	private static int leftStick = ANALOG_NEUTRAL;
+	private static int rightStick = ANALOG_NEUTRAL;
+	
+	private static boolean previousaButton = aButton; 
+	private static boolean previousbButton = bButton;
+	private static boolean previousxButton = xButton;
+	private static boolean previousyButton = yButton;
+	private static boolean previouslb = lb;
+	private static boolean previousrb = rb;
+	private static boolean previousback = back;
+	private static boolean previousstart = start;
+	private static boolean previousls = ls;
+	private static boolean previousrs = rs;
+	
+	private static boolean previouslt = lt;
+	private static boolean previousrt = rt;
+	
+	private static int previousLeftStick = leftStick;
+	private static int previousRightStick = rightStick;
+	
+	
 	
 	static boolean value = false;
 	
 	static boolean doPolling = true;
 	
-	public static Controller[] getAllControllers() {
+	static UIV2 ui;
+	
+	public ControllerTest(Controller arg0) {
 		
-		return ControllerEnvironment.getDefaultEnvironment().getControllers();		
+		controller = arg0;
+		aButton = false; 
+		bButton = false;
+		xButton = false;
+		yButton = false;
+		lb = false;
+		rb = false;
+		back = false;
+		start = false;
+		ls = false;
+		rs = false;
+		
+		lt = false;
+		rt = false;
+		
+		leftStick = ANALOG_NEUTRAL;
+		rightStick = ANALOG_NEUTRAL;
+		
+		previousaButton = aButton;
+		previousbButton = bButton;
+		previousxButton = xButton;
+		previousyButton = yButton;
+		previouslb = lb;
+		previousrb = rb;
+		previousback = back;
+		previousstart = start;
+		previousls = ls;
+		previousrs = rs;
+		
+		previouslt = lt;
+		previousrt = rt;
+		
+		previousLeftStick = leftStick;
+		previousRightStick = rightStick;
+		
 	}
 	
+	private static Vector<Controller> getAllControllersOfType(Controller.Type controllerType) {
+		
+		Vector<Controller> output = new Vector<Controller>();
+		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		for (Controller c : controllers) {
+			if (c.getType() == controllerType) {
+				output.add(c);
+			}
+		}
+		return output;
+		
+	}
 
-<<<<<<< HEAD
 	/**
 	 * Call this method to get controller input (does not contain a loop)
 	 */
 	public void pollControllerInput() {
-=======
-	public static void pollController(Controller c) {
->>>>>>> parent of 754b2cd... Made controls respond to a full button press
 		
-		doPolling = true;
-		while (doPolling) {
-			c.poll();
-			Component[] components = c.getComponents();
+		rememberVariables();
+//		while(doPolling) {
+			controller.poll();
+			Component[] components = controller.getComponents();
 			for (int i = 0; i < components.length; i++) {
 				
 				boolean isAnalog = components[i].isAnalog();
@@ -79,28 +144,28 @@ public class ControllerTest {
 
 						@Override
 						public void run() {
-							// Left Stick
+							// ANALOG_LEFT Stick
 							if (name.equalsIgnoreCase("Y Axis")) {
-								if (analogValue == 1) leftStick = DOWN;
-								if (analogValue == -1) leftStick = UP;
-								if (analogValue != -1 && analogValue != 1) leftStick = NEUTRAL;
+								if (analogValue == 1) leftStick = ANALOG_DOWN;
+								if (analogValue == -1) leftStick = ANALOG_UP;
+								if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
 							}
-							else if (name.equalsIgnoreCase("X Axis") && leftStick == NEUTRAL) {
-								if (analogValue == 1) leftStick = RIGHT;
-								if (analogValue == -1) leftStick = LEFT;
-								if (analogValue != -1 && analogValue != 1) leftStick = NEUTRAL;
+							else if (name.equalsIgnoreCase("X Axis") && leftStick == ANALOG_NEUTRAL) {
+								if (analogValue == 1) leftStick = ANALOG_RIGHT;
+								if (analogValue == -1) leftStick = ANALOG_LEFT;
+								if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
 							}
 							
-							// Right Stick
+							// ANALOG_RIGHT Stick
 							if (name.equalsIgnoreCase("Y Rotation")) {
-								if (analogValue == 1) rightStick = DOWN;
-								if (analogValue == -1) rightStick = UP;
-								if (analogValue != -1 && analogValue != 1) rightStick = NEUTRAL;
+								if (analogValue == 1) rightStick = ANALOG_DOWN;
+								if (analogValue == -1) rightStick = ANALOG_UP;
+								if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
 							}
-							if (name.equalsIgnoreCase("X Rotation") && rightStick == NEUTRAL) {
-								if (analogValue == 1) rightStick = RIGHT;
-								if (analogValue == -1) rightStick = LEFT;
-								if (analogValue != -1 && analogValue != 1) rightStick = NEUTRAL;
+							if (name.equalsIgnoreCase("X Rotation") && rightStick == ANALOG_NEUTRAL) {
+								if (analogValue == 1) rightStick = ANALOG_RIGHT;
+								if (analogValue == -1) rightStick = ANALOG_LEFT;
+								if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
 							}
 						}
 					};
@@ -133,7 +198,7 @@ public class ControllerTest {
 				
 				setButtonValues.run();
 				
-				outputAllVariables();
+//				outputAllVariables();
 				
 			}
 
@@ -142,14 +207,10 @@ public class ControllerTest {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
+//		}
 	}
 	
-<<<<<<< HEAD
 	private static void outputAllVariablesInConsole() {
-=======
-	public static void outputAllVariables() {
->>>>>>> parent of 754b2cd... Made controls respond to a full button press
 		System.out.println();
 		System.out.println("A: " + aButton);
 		System.out.println("B: " + bButton);
@@ -163,26 +224,42 @@ public class ControllerTest {
 		System.out.println("RT: " + rt);
 		System.out.println("BACK: " + back);
 		System.out.println("START: " + start);
-		if (leftStick == NEUTRAL) System.out.println("Left Stick: Neutral");
-		else if (leftStick == UP) System.out.println("Left Stick: Up");
-		else if (leftStick == DOWN) System.out.println("Left Stick: Down");
-		else if (leftStick == LEFT) System.out.println("Left Stick: Left");
-		else if (leftStick == RIGHT) System.out.println("Left Stick: Right");
-		else if (leftStick == ERROR) System.out.println("Left Stick: Error");
-		if (rightStick == NEUTRAL) System.out.println("Right Stick: Neutral");
-		else if (rightStick == UP) System.out.println("Right Stick: Up");
-		else if (rightStick == DOWN) System.out.println("Right Stick: Down");
-		else if (rightStick == LEFT) System.out.println("Right Stick: Left");
-		else if (rightStick == RIGHT) System.out.println("Right Stick: Right");
-		else if (rightStick == ERROR) System.out.println("Right Stick: Error");
+		if (leftStick == ANALOG_NEUTRAL) System.out.println("Left Stick: ANALOG_NEUTRAL");
+		else if (leftStick == ANALOG_UP) System.out.println("Left Stick: ANALOG_UP");
+		else if (leftStick == ANALOG_DOWN) System.out.println("Left Stick: ANALOG_DOWN");
+		else if (leftStick == ANALOG_LEFT) System.out.println("Left Stick: ANALOG_LEFT");
+		else if (leftStick == ANALOG_RIGHT) System.out.println("Left Stick: ANALOG_RIGHT");
+		else if (leftStick == ANALOG_ERROR) System.out.println("Left Stick: Error");
+		if (rightStick == ANALOG_NEUTRAL) System.out.println("Right Stick: ANALOG_NEUTRAL");
+		else if (rightStick == ANALOG_UP) System.out.println("Right Stick: ANALOG_UP");
+		else if (rightStick == ANALOG_DOWN) System.out.println("Right Stick: ANALOG_DOWN");
+		else if (rightStick == ANALOG_LEFT) System.out.println("Right Stick: ANALOG_LEFT");
+		else if (rightStick == ANALOG_RIGHT) System.out.println("Right Stick: ANALOG_RIGHT");
+		else if (rightStick == ANALOG_ERROR) System.out.println("Right Stick: Error");
 		System.out.println();
 	}
 	
-	public static void stopPolling() {
-		doPolling = false;
+	private static void rememberVariables() {
+		
+		previousaButton = aButton;
+		previousbButton = bButton;
+		previousxButton = xButton;
+		previousyButton = yButton;
+		previouslb = lb;
+		previousrb = rb;
+		previousback = back;
+		previousstart = start;
+		previousls = ls;
+		previousrs = rs;
+		
+		previouslt = lt;
+		previousrt = rt;
+		
+		previousLeftStick = leftStick;
+		previousRightStick = rightStick;
+		
 	}
 	
-<<<<<<< HEAD
 	public boolean isAButton() {
 		if (!aButton && previousaButton) return true;
 		else return false;
@@ -237,9 +314,19 @@ public class ControllerTest {
 		if (!lt && previouslt) return true;
 		else return false;
 	}
+	
+	public boolean isLtHeld() {
+		if (lt && previouslt) return true;
+		else return false;
+	}
 
 	public boolean isRt() {
 		if (!rt && previousrt) return true;
+		else return false;
+	}
+	
+	public boolean isRtHeld() {
+		if (rt && previousrt) return true;
 		else return false;
 	}
 
@@ -249,16 +336,48 @@ public class ControllerTest {
 
 	public int getRightStick() {
 		return rightStick;
-=======
+	}
+	
 	public static void main(String[] args) {
 		
-		UI ui = new UI();
-		Controller[] controllers = getAllControllersOfType(Controller.Type.GAMEPAD);
-		System.out.println(controllers.length);
-		pollController(controllers[0]);
-		stopPolling();
+		UIV2 ui = new UIV2();
+		ui = new UIV2();
+		ui.setVisible(true);
+		Vector<ControllerTest> controllers = new Vector<ControllerTest>();
 		
->>>>>>> parent of 754b2cd... Made controls respond to a full button press
+		try {
+			
+			for (Controller c : getAllControllersOfType(Controller.Type.GAMEPAD)) {
+				
+				controllers.add(new ControllerTest(c));
+				
+			}
+			
+		} catch (ArrayIndexOutOfBoundsException e) {
+			
+			System.err.println("No Controllers Detected.");
+			System.exit(0);
+			
+		}
+		
+		int value = 0;
+		
+		while (true) {
+			
+			for (ControllerTest ct : controllers) {
+				
+				ct.pollControllerInput();
+				// *** CONTROLS ***
+				if (ct.isAButton()) ui.autonomousRobot1.score1Field.setText("" + ++value);
+				if (ct.isbButton()) ui.autonomousRobot1.score1Field.setText("" + --value);
+				// *** END OF CONTROLS ***
+				
+			}
+			
+			
+		}
+				
 	}
 	
 }
+	
