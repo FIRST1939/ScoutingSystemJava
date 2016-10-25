@@ -1,6 +1,6 @@
 package elements;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import net.java.games.input.Component;
@@ -51,7 +51,10 @@ public class ControllerTest {
 	private static int previousLeftStick = leftStick;
 	private static int previousRightStick = rightStick;
 	
+	private ActionListener listener;
+	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
 	
+	public int robotPanelNumber = -1;
 	
 	static boolean value = false;
 	
@@ -59,7 +62,7 @@ public class ControllerTest {
 	
 	static UIV2 ui;
 	
-	public ControllerTest(Controller arg0) {
+	public ControllerTest(Controller arg0, int controlsWhichRobotPanel) {
 		
 		controller = arg0;
 		aButton = false; 
@@ -96,6 +99,8 @@ public class ControllerTest {
 		previousLeftStick = leftStick;
 		previousRightStick = rightStick;
 		
+		robotPanelNumber = controlsWhichRobotPanel;
+		
 	}
 	
 	private static Vector<Controller> getAllControllersOfType(Controller.Type controllerType) {
@@ -117,7 +122,6 @@ public class ControllerTest {
 	public void pollControllerInput() {
 		
 		rememberVariables();
-//		while(doPolling) {
 			controller.poll();
 			Component[] components = controller.getComponents();
 			for (int i = 0; i < components.length; i++) {
@@ -203,11 +207,11 @@ public class ControllerTest {
 			}
 
 			try {
+				if (listener != null) listener.actionPerformed(queueControls);
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-//		}
 	}
 	
 	private static void outputAllVariablesInConsole() {
@@ -261,21 +265,23 @@ public class ControllerTest {
 	}
 	
 	public boolean isAButton() {
-		if (!aButton && previousaButton) return true;
+		if (!aButton && previousaButton) {
+			return true;
+		}
 		else return false;
 	}
 
-	public boolean isbButton() {
+	public boolean isBButton() {
 		if (!bButton && previousbButton) return true;
 		else return false;
 	}
 
-	public boolean isxButton() {
+	public boolean isXButton() {
 		if (!xButton &&previousxButton) return true;
 		else return false;
 	}
 
-	public boolean isyButton() {
+	public boolean isYButton() {
 		if (!yButton &&previousyButton) return true;
 		else return false;
 	}
@@ -338,45 +344,8 @@ public class ControllerTest {
 		return rightStick;
 	}
 	
-	public static void main(String[] args) {
-		
-		UIV2 ui = new UIV2();
-		ui = new UIV2();
-		ui.setVisible(true);
-		Vector<ControllerTest> controllers = new Vector<ControllerTest>();
-		
-		try {
-			
-			for (Controller c : getAllControllersOfType(Controller.Type.GAMEPAD)) {
-				
-				controllers.add(new ControllerTest(c));
-				
-			}
-			
-		} catch (ArrayIndexOutOfBoundsException e) {
-			
-			System.err.println("No Controllers Detected.");
-			System.exit(0);
-			
-		}
-		
-		int value = 0;
-		
-		while (true) {
-			
-			for (ControllerTest ct : controllers) {
-				
-				ct.pollControllerInput();
-				// *** CONTROLS ***
-				if (ct.isAButton()) ui.autonomousRobot1.score1Field.setText("" + ++value);
-				if (ct.isbButton()) ui.autonomousRobot1.score1Field.setText("" + --value);
-				// *** END OF CONTROLS ***
-				
-			}
-			
-			
-		}
-				
+	public void setActionListener(ActionListener arg0) {
+		listener = arg0;
 	}
 	
 }
