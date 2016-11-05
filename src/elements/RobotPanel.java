@@ -12,20 +12,25 @@ import javax.swing.event.ChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+@SuppressWarnings("serial")
 public class RobotPanel extends JTabbedPane {
 	
 	public AutonomousRobotPanel autonomous;
-	public TeleoperatedRobotPanel teleop;
+	public TeleoperatedRobotPanel teleoperated;
+	private String teamNumber = "";
+	private Color previousColor;
 	
 	public RobotPanel(String teamName, Color teamColor) {
-		
+		teamNumber = teamName;
 		autonomous = new AutonomousRobotPanel(teamName, teamColor);
-		teleop = new TeleoperatedRobotPanel(teamName, teamColor);
+		teleoperated = new TeleoperatedRobotPanel(teamName, teamColor);
+		
+		previousColor = teamColor;
 		
 		this.addTab("Autonomous", autonomous);
-		this.addTab("Teleoperated", teleop);
+		this.addTab("Teleoperated", teleoperated);
 		
-		try { // All this should work
+		try {
 			this.addChangeListener(new ChangeListener() {
 
 				@Override
@@ -42,6 +47,10 @@ public class RobotPanel extends JTabbedPane {
 			System.exit(0);
 		}
 		
+	}
+	
+	public String getTeamNumber() {
+		return teamNumber;
 	}
 	
 }

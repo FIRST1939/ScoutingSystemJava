@@ -2,10 +2,10 @@ package elements;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -33,6 +33,9 @@ public class TeleoperatedRobotPanel extends JPanel {
 	public JLabel score2 = new JLabel();
 	public JLabel score3 = new JLabel();
 	public JLabel score4 = new JLabel();
+	
+	public Vector<JLabel> scoreLabels = new Vector<JLabel>();
+	public Vector<JTextField> scoreFields = new Vector<JTextField>();
 	
 	public TeleoperatedRobotPanel(String teamName, Color teamColor) {
 		
@@ -122,5 +125,14 @@ public class TeleoperatedRobotPanel extends JPanel {
 		this.add(score4Field, "4, 12, fill, fill");
 		score4Field.setColumns(10);
 		
+		scoreLabels.add(score1);
+		scoreLabels.add(score2);
+		scoreLabels.add(score3);
+		scoreLabels.add(score4);
+		
+		scoreFields.add(score1Field);
+		scoreFields.add(score2Field);
+		scoreFields.add(score3Field);
+		scoreFields.add(score4Field);
 	}
 }

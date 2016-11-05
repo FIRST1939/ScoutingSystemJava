@@ -2,6 +2,7 @@ package elements;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,10 +27,14 @@ public class AutonomousRobotPanel extends JPanel {
 	public JTextField score4Field;
 	
 	public JLabel name;
+	
 	public JLabel score1;
 	public JLabel score2;
 	public JLabel score3;
 	public JLabel score4;
+	
+	public Vector<JLabel> scoreLabels = new Vector<JLabel>();
+	public Vector<JTextField> scoreFields = new Vector<JTextField>();
 	
 	public AutonomousRobotPanel(String teamName, Color teamColor) {
 		
@@ -119,6 +124,15 @@ public class AutonomousRobotPanel extends JPanel {
 		this.add(score4Field, "4, 12, fill, fill");
 		score4Field.setColumns(10);
 		
+		scoreLabels.add(score1);
+		scoreLabels.add(score2);
+		scoreLabels.add(score3);
+		scoreLabels.add(score4);
+		
+		scoreFields.add(score1Field);
+		scoreFields.add(score2Field);
+		scoreFields.add(score3Field);
+		scoreFields.add(score4Field);
+		
 	}
-	
 }
