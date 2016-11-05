@@ -23,7 +23,7 @@ import javax.swing.JTabbedPane;
 import tools.ExportData;
 
 @SuppressWarnings("serial")
-public class UIV2 extends JFrame {
+public class UIV2 extends JFrame implements ActionListener {
 
 	public RobotPanel robot1;
 	public RobotPanel robot2;
@@ -73,56 +73,12 @@ public class UIV2 extends JFrame {
 		setJMenuBar(menuBar);
 
 		itemToCSV = new JMenuItem("to .csv");
-		itemToCSV.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				getSaveLocation();
-				ExportData.toCSV(UIV2.this);
-			}
-
-		});
+		itemToCSV.setActionCommand("convert to csv");
+		itemToCSV.addActionListener(this);
 		
 		itemImportEventData = new JMenuItem("Import Event Data");
-		itemImportEventData.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					File file = getEvent();
-					List<String> lines = FileUtils.read(file);
-					if (lines.size() == 1) {
-						String str = lines.toString();
-						str = str.replace("[", "");
-						str = str.replace("]", "");
-						Vector<Integer> indexes = new Vector<Integer>();
-						Vector<String> strings = new Vector<String>();
-						
-						char[] arr = str.toCharArray();
-						for (int i = 0; i < arr.length; i++) {
-							if (arr[i]==',') {
-								indexes.add(i);
-							}
-						}
-						
-						panels.removeAllElements();
-						
-						Vector<String> teamNames = new Vector<String>();
-						teamNames.add(str.substring(0, indexes.get(0)).trim());
-						teamNames.add(str.substring(indexes.get(0)+1, indexes.get(1)).trim());
-						teamNames.add(str.substring(indexes.get(1)+1, indexes.get(2)).trim());
-						teamNames.add(str.substring(indexes.get(2)+1, indexes.get(3)).trim());
-						teamNames.add(str.substring(indexes.get(3)+1, indexes.get(4)).trim());
-						teamNames.add(str.substring(indexes.get(4)+1).trim());
-						// TODO Need to set the team names here
-						System.out.println(teamNames);
-						
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		itemImportEventData.setActionCommand("update team numbers");
+		itemImportEventData.addActionListener(this);
 		
 		menuExport = new JMenu();
 		menuExport.setText("Export");
@@ -163,6 +119,52 @@ public class UIV2 extends JFrame {
 
 		maxNumberOfAutonomousScoreFields = panels.get(0).autonomous.scoreFields.size();
 		maxNumberOfTeleoperatedScoreFields = panels.get(0).teleoperated.scoreFields.size();
+	}
+	
+	
+	// This is where the action listeners are managed for this class (not for the controllers)
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if (event.getActionCommand().equals("convert to csv")) {
+			getSaveLocation();
+			ExportData.toCSV(UIV2.this);
+		}
+		else if (event.getActionCommand().equals("update team numbers")) {
+			try {
+				File file = getEvent();
+				List<String> lines = FileUtils.read(file);
+				if (lines.size() == 1) {
+					String str = lines.toString();
+					str = str.replace("[", "");
+					str = str.replace("]", "");
+					Vector<Integer> indexes = new Vector<Integer>();
+					Vector<String> strings = new Vector<String>();
+					
+					char[] arr = str.toCharArray();
+					for (int i = 0; i < arr.length; i++) {
+						if (arr[i]==',') {
+							indexes.add(i);
+						}
+					}
+					
+					Vector<String> teamNames = new Vector<String>();
+					teamNames.add(str.substring(0, indexes.get(0)).trim());
+					teamNames.add(str.substring(indexes.get(0)+1, indexes.get(1)).trim());
+					teamNames.add(str.substring(indexes.get(1)+1, indexes.get(2)).trim());
+					teamNames.add(str.substring(indexes.get(2)+1, indexes.get(3)).trim());
+					teamNames.add(str.substring(indexes.get(3)+1, indexes.get(4)).trim());
+					teamNames.add(str.substring(indexes.get(4)+1).trim());
+					
+					for (int i = 0; i < teamNames.size(); i++) {
+						panels.get(i).autonomous.name.setText(teamNames.get(i));
+						panels.get(i).teleoperated.name.setText(teamNames.get(i));
+					}
+					
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 
