@@ -1,25 +1,28 @@
 package elements;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
+import tools.ExportData;
 
+@SuppressWarnings("serial")
 public class UIV2 extends JFrame {
 
 	public RobotPanel robot1;
@@ -28,27 +31,37 @@ public class UIV2 extends JFrame {
 	public RobotPanel robot4;
 	public RobotPanel robot5;
 	public RobotPanel robot6;
-	
+
+	public Vector<RobotPanel> panels = new Vector<RobotPanel>();
+
 	public JMenuBar menuBar;
-	
+
 	public JMenu menuExport;
 	public JMenu menuCompetition;
-	
-	public JMenuItem itemStartMatch;
-	public JMenuItem itemReset;
+
+	public JMenuItem itemImportEventData;
 	public JMenuItem itemToCSV;
-	
+
 	public static JPanel contentPane = new JPanel();
+
+	public int maxNumberOfAutonomousScoreFields = 0;
+	public int maxNumberOfTeleoperatedScoreFields = 0;
+
+	public File autonomousSaveFile = null;
+	public File teleoperatedSaveFile = null;
+
+	public File defaultSaveFile = new File(
+			(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 
 	/**
 	 * Create the frame. Is not initially set to be visible
 	 */
 	public UIV2() {
-		
+
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int widthOfScreen = (int) screenSize.getWidth();
 		int heightOfScreen = (int) screenSize.getHeight();
-		
+
 		setMaximizedBounds(new Rectangle(0, 0, widthOfScreen, heightOfScreen));
 		setSize(screenSize);
 		setType(Type.NORMAL);
@@ -56,66 +69,198 @@ public class UIV2 extends JFrame {
 		setTitle("Scouting Program");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, widthOfScreen, heightOfScreen);
-		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+
+		itemToCSV = new JMenuItem("to .csv");
+		itemToCSV.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				getSaveLocation();
+				ExportData.toCSV(UIV2.this);
+			}
+
+		});
 		
-		menuCompetition = new JMenu("Competition");
-		menuCompetition.setHorizontalAlignment(SwingConstants.CENTER);
-		menuBar.add(menuCompetition);
+		itemImportEventData = new JMenuItem("Import Event Data");
+		itemImportEventData.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					File file = getEvent();
+					List<String> lines = FileUtils.read(file);
+					if (lines.size() == 1) {
+						String str = lines.toString();
+						str = str.replace("[", "");
+						str = str.replace("]", "");
+						Vector<Integer> indexes = new Vector<Integer>();
+						Vector<String> strings = new Vector<String>();
+						
+						char[] arr = str.toCharArray();
+						for (int i = 0; i < arr.length; i++) {
+							if (arr[i]==',') {
+								indexes.add(i);
+							}
+						}
+						
+						panels.removeAllElements();
+						
+						Vector<String> teamNames = new Vector<String>();
+						teamNames.add(str.substring(0, indexes.get(0)).trim());
+						teamNames.add(str.substring(indexes.get(0)+1, indexes.get(1)).trim());
+						teamNames.add(str.substring(indexes.get(1)+1, indexes.get(2)).trim());
+						teamNames.add(str.substring(indexes.get(2)+1, indexes.get(3)).trim());
+						teamNames.add(str.substring(indexes.get(3)+1, indexes.get(4)).trim());
+						teamNames.add(str.substring(indexes.get(4)+1).trim());
+						// TODO Need to set the team names here
+						System.out.println(teamNames);
+						
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		
-		itemStartMatch = new JMenuItem("Start Match");
-		itemStartMatch.setHorizontalAlignment(SwingConstants.CENTER);
-		menuCompetition.add(itemStartMatch);
-		
-		itemReset = new JMenuItem("Reset");
-		menuCompetition.add(itemReset);
-		
-		menuExport = new JMenu("Export");
+		menuExport = new JMenu();
+		menuExport.setText("Export");
+		menuExport.add(itemToCSV);
 		menuBar.add(menuExport);
 		
-		itemToCSV = new JMenuItem("to .csv");
-		menuExport.add(itemToCSV);
+		menuCompetition = new JMenu();
+		menuCompetition.setText("Competition");
+		menuCompetition.add(itemImportEventData);
+		menuBar.add(menuCompetition);
 		
 		robot1 = new RobotPanel("Team 1", Color.RED);
-			robot1.setTabPlacement(JTabbedPane.TOP);
+		robot1.setTabPlacement(JTabbedPane.TOP);
 		robot2 = new RobotPanel("Team 2", Color.RED);
-			robot2.setTabPlacement(JTabbedPane.TOP);
+		robot2.setTabPlacement(JTabbedPane.TOP);
 		robot3 = new RobotPanel("Team 3", Color.RED);
-			robot3.setTabPlacement(JTabbedPane.TOP);
+		robot3.setTabPlacement(JTabbedPane.TOP);
 		robot4 = new RobotPanel("Team 4", Color.BLUE);
-			robot4.setTabPlacement(JTabbedPane.BOTTOM);
+		robot4.setTabPlacement(JTabbedPane.BOTTOM);
 		robot5 = new RobotPanel("Team 5", Color.BLUE);
-			robot5.setTabPlacement(JTabbedPane.BOTTOM);
+		robot5.setTabPlacement(JTabbedPane.BOTTOM);
 		robot6 = new RobotPanel("Team 6", Color.BLUE);
-			robot6.setTabPlacement(JTabbedPane.BOTTOM);
-			
+		robot6.setTabPlacement(JTabbedPane.BOTTOM);
+
+		panels.add(robot1);
+		panels.add(robot2);
+		panels.add(robot3);
+		panels.add(robot4);
+		panels.add(robot5);
+		panels.add(robot6);
+
 		contentPane.setLayout(new GridLayout(2, 3, 1, 1));
-		contentPane.add(robot1);
-		contentPane.add(robot2);
-		contentPane.add(robot3);
-		contentPane.add(robot4);
-		contentPane.add(robot5);
-		contentPane.add(robot6);
-		
+		for (RobotPanel rp : panels) {
+			contentPane.add(rp);
+		}
+
 		this.setContentPane(contentPane);
-		
+
+		maxNumberOfAutonomousScoreFields = panels.get(0).autonomous.scoreFields.size();
+		maxNumberOfTeleoperatedScoreFields = panels.get(0).teleoperated.scoreFields.size();
 	}
 	
+
 	/**
-	 * Gets RobotPanel
-	 * @param index Valid numbers are 0-5
-	 * @return Retruns a RobotPanel. Returns null if you put any value other than 0-5.
+	 * Gets a specified RobotPanel
+	 * 
+	 * @param index
+	 *            Valid numbers are 0-5
+	 * @return Retruns a RobotPanel. Returns null if you put any value other
+	 *         than 0-5.
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             Is thrown when the index is not equal to 0-5.
 	 */
-	public RobotPanel getRobotPanel(int index) {
-		
-		if (index==0) return robot1;
-		else if (index==1) return robot2;
-		else if (index==2) return robot3;
-		else if (index==3) return robot4;
-		else if (index==4) return robot5;
-		else if (index==5) return robot6;
-		else return null;
-		
+	public RobotPanel getRobotPanel(int index) throws ArrayIndexOutOfBoundsException {
+		try {
+			return panels.get(index);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw e;
+		}
 	}
+
+	/**
+	 * Self Explanatory.
+	 * 
+	 * @param index
+	 *            The index of the score in scoreLabels in the
+	 *            AutonomousRobotPanel class.
+	 * @return Returns All autonomous scores in specified index in the form of a
+	 *         Vector<String>
+	 */
+	public Vector<String> getAutonomousScores(int index) {
+		Vector<String> scores = new Vector<String>();
+
+		// Getting the specified autonomous score in each RobotPanel
+		for (RobotPanel rp : panels) {
+			scores.add(rp.autonomous.scoreFields.get(index).getText());
+		}
+		//
+		return scores;
+	}
+
+	public Vector<String> getTeleoperatedScores(int index) {
+		Vector<String> scores = new Vector<String>();
+
+		// if (index == maxNumberOfTeleoperatedScoreFields) throw new
+		// ArrayIndexOutOfBoundsException();
+
+		// Getting the specified autonomous score in each RobotPanel
+		for (RobotPanel rp : panels) {
+			scores.add(rp.teleoperated.scoreFields.get(index).getText());
+		}
+		//
+		return scores;
+
+	}
+
+	private void getSaveLocation() {
+		// Autonomous Save File
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setCurrentDirectory(defaultSaveFile);
+		int result = chooser.showSaveDialog(this);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			autonomousSaveFile = chooser.getSelectedFile();
+		} else {
+			autonomousSaveFile = null;
+		}
+
+		// Teleoperated Save File
+		JFileChooser chooser2 = new JFileChooser();
+		chooser2.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser2.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser2.setCurrentDirectory(defaultSaveFile);
+		int result2 = chooser2.showSaveDialog(this);
+		if (result2 == JFileChooser.APPROVE_OPTION) {
+			teleoperatedSaveFile = chooser2.getSelectedFile();
+		} else {
+			teleoperatedSaveFile = null;
+		}
+	}
+	
+	private File getEvent() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setCurrentDirectory(defaultSaveFile);
+		
+		File forDebug = new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop" + System.getProperty("file.separator") + "testEvent.txt"); 
+		
+		
+		int result = chooser.showOpenDialog(this);
+		if (result == JFileChooser.APPROVE_OPTION) {
+//			return chooser.getSelectedFile();
+			return forDebug;
+		} else {
+			return null;
+		}
+	}
+	
 }
