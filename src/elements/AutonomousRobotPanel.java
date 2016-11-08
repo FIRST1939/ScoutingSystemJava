@@ -17,6 +17,7 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class AutonomousRobotPanel extends JPanel {
 	
+	private static final long serialVersionUID = 6359351737359562358L;
 	public Font nameFont = new Font("Tahoma", Font.BOLD, 15);
 	public Font scoreLabelFont = new Font("Tahoma", Font.PLAIN, 15);
 	public Font scoreFieldFont = new Font("Tahoma", Font.PLAIN, 15);

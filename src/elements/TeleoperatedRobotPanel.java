@@ -67,7 +67,6 @@ public class TeleoperatedRobotPanel extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,}));
 		
-		
 		name = new JLabel(teamName);
 		name.setSize(this.getWidth(), 14);
 		name.setHorizontalAlignment(SwingConstants.CENTER);

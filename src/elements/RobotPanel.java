@@ -18,14 +18,12 @@ public class RobotPanel extends JTabbedPane {
 	public AutonomousRobotPanel autonomous;
 	public TeleoperatedRobotPanel teleoperated;
 	private String teamNumber = "";
-	private Color previousColor;
 	
 	public RobotPanel(String teamName, Color teamColor) {
+		
 		teamNumber = teamName;
 		autonomous = new AutonomousRobotPanel(teamName, teamColor);
 		teleoperated = new TeleoperatedRobotPanel(teamName, teamColor);
-		
-		previousColor = teamColor;
 		
 		this.addTab("Autonomous", autonomous);
 		this.addTab("Teleoperated", teleoperated);

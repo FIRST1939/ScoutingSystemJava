@@ -8,10 +8,16 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -38,9 +44,11 @@ public class UIV2 extends JFrame implements ActionListener {
 
 	public JMenu menuExport;
 	public JMenu menuCompetition;
+	public JMenu menuDebug;
 
 	public JMenuItem itemImportEventData;
 	public JMenuItem itemToCSV;
+	public JMenuItem itemGetLog;
 
 	public static JPanel contentPane = new JPanel();
 
@@ -49,9 +57,9 @@ public class UIV2 extends JFrame implements ActionListener {
 
 	public File autonomousSaveFile = null;
 	public File teleoperatedSaveFile = null;
-
-	public File defaultSaveFile = new File(
-			(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+	public File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+	
+	public ConsoleWindow console;
 
 	/**
 	 * Create the frame. Is not initially set to be visible
@@ -65,7 +73,6 @@ public class UIV2 extends JFrame implements ActionListener {
 		setMaximizedBounds(new Rectangle(0, 0, widthOfScreen, heightOfScreen));
 		setSize(screenSize);
 		setType(Type.NORMAL);
-		setAlwaysOnTop(true);
 		setTitle("Scouting Program");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, widthOfScreen, heightOfScreen);
@@ -75,20 +82,29 @@ public class UIV2 extends JFrame implements ActionListener {
 		itemToCSV = new JMenuItem("to .csv");
 		itemToCSV.setActionCommand("convert to csv");
 		itemToCSV.addActionListener(this);
-		
+
 		itemImportEventData = new JMenuItem("Import Event Data");
 		itemImportEventData.setActionCommand("update team numbers");
 		itemImportEventData.addActionListener(this);
 		
+		itemGetLog = new JMenuItem("Show System Log");
+		itemGetLog.setActionCommand("show system log");
+		itemGetLog.addActionListener(this);
+
 		menuExport = new JMenu();
 		menuExport.setText("Export");
 		menuExport.add(itemToCSV);
 		menuBar.add(menuExport);
-		
+
 		menuCompetition = new JMenu();
 		menuCompetition.setText("Competition");
 		menuCompetition.add(itemImportEventData);
 		menuBar.add(menuCompetition);
+		
+		menuDebug = new JMenu();
+		menuDebug.setText("Debug");
+		menuDebug.add(itemGetLog);
+		menuBar.add(menuDebug);
 		
 		robot1 = new RobotPanel("Team 1", Color.RED);
 		robot1.setTabPlacement(JTabbedPane.TOP);
@@ -114,22 +130,20 @@ public class UIV2 extends JFrame implements ActionListener {
 		for (RobotPanel rp : panels) {
 			contentPane.add(rp);
 		}
-
+		
+		console = new ConsoleWindow();
+		
 		this.setContentPane(contentPane);
-
-		maxNumberOfAutonomousScoreFields = panels.get(0).autonomous.scoreFields.size();
-		maxNumberOfTeleoperatedScoreFields = panels.get(0).teleoperated.scoreFields.size();
+		
 	}
-	
-	
-	// This is where the action listeners are managed for this class (not for the controllers)
+
+	// This is where the action listeners are managed for this class (not forthe controllers)
 	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (event.getActionCommand().equals("convert to csv")) {
+	public void actionPerformed(ActionEvent event) { 
+		if (event.getActionCommand().equals("convert to csv")) {// CSV conversion
 			getSaveLocation();
 			ExportData.toCSV(UIV2.this);
-		}
-		else if (event.getActionCommand().equals("update team numbers")) {
+		} else if (event.getActionCommand().equals("update team numbers")) { // Updates team numbers from a comma separated value list in a txt file
 			try {
 				File file = getEvent();
 				List<String> lines = FileUtils.read(file);
@@ -138,35 +152,34 @@ public class UIV2 extends JFrame implements ActionListener {
 					str = str.replace("[", "");
 					str = str.replace("]", "");
 					Vector<Integer> indexes = new Vector<Integer>();
-					Vector<String> strings = new Vector<String>();
-					
 					char[] arr = str.toCharArray();
 					for (int i = 0; i < arr.length; i++) {
-						if (arr[i]==',') {
+						if (arr[i] == ',') {
 							indexes.add(i);
 						}
 					}
-					
+
 					Vector<String> teamNames = new Vector<String>();
 					teamNames.add(str.substring(0, indexes.get(0)).trim());
-					teamNames.add(str.substring(indexes.get(0)+1, indexes.get(1)).trim());
-					teamNames.add(str.substring(indexes.get(1)+1, indexes.get(2)).trim());
-					teamNames.add(str.substring(indexes.get(2)+1, indexes.get(3)).trim());
-					teamNames.add(str.substring(indexes.get(3)+1, indexes.get(4)).trim());
-					teamNames.add(str.substring(indexes.get(4)+1).trim());
-					
+					teamNames.add(str.substring(indexes.get(0) + 1, indexes.get(1)).trim());
+					teamNames.add(str.substring(indexes.get(1) + 1, indexes.get(2)).trim());
+					teamNames.add(str.substring(indexes.get(2) + 1, indexes.get(3)).trim());
+					teamNames.add(str.substring(indexes.get(3) + 1, indexes.get(4)).trim());
+					teamNames.add(str.substring(indexes.get(4) + 1).trim());
+
 					for (int i = 0; i < teamNames.size(); i++) {
 						panels.get(i).autonomous.name.setText(teamNames.get(i));
 						panels.get(i).teleoperated.name.setText(teamNames.get(i));
 					}
-					
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else if (event.getActionCommand().equals("show system log")) {
+			console.setVisible(true);
 		}
 	}
-	
 
 	/**
 	 * Gets a specified RobotPanel
@@ -209,9 +222,6 @@ public class UIV2 extends JFrame implements ActionListener {
 	public Vector<String> getTeleoperatedScores(int index) {
 		Vector<String> scores = new Vector<String>();
 
-		// if (index == maxNumberOfTeleoperatedScoreFields) throw new
-		// ArrayIndexOutOfBoundsException();
-
 		// Getting the specified autonomous score in each RobotPanel
 		for (RobotPanel rp : panels) {
 			scores.add(rp.teleoperated.scoreFields.get(index).getText());
@@ -221,12 +231,16 @@ public class UIV2 extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	 * Gets the save locations for the Autonomous and Teleoperated csv's
+	 */
 	private void getSaveLocation() {
 		// Autonomous Save File
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setCurrentDirectory(defaultSaveFile);
+		chooser.setDialogTitle("Export Autonomous Data");
 		int result = chooser.showSaveDialog(this);
 		if (result == JFileChooser.APPROVE_OPTION) {
 			autonomousSaveFile = chooser.getSelectedFile();
@@ -239,6 +253,7 @@ public class UIV2 extends JFrame implements ActionListener {
 		chooser2.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser2.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser2.setCurrentDirectory(defaultSaveFile);
+		chooser2.setDialogTitle("Export Teleoperated Data");
 		int result2 = chooser2.showSaveDialog(this);
 		if (result2 == JFileChooser.APPROVE_OPTION) {
 			teleoperatedSaveFile = chooser2.getSelectedFile();
@@ -246,23 +261,19 @@ public class UIV2 extends JFrame implements ActionListener {
 			teleoperatedSaveFile = null;
 		}
 	}
-	
+
 	private File getEvent() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setCurrentDirectory(defaultSaveFile);
-		
-		File forDebug = new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop" + System.getProperty("file.separator") + "testEvent.txt"); 
-		
-		
+
 		int result = chooser.showOpenDialog(this);
 		if (result == JFileChooser.APPROVE_OPTION) {
-//			return chooser.getSelectedFile();
-			return forDebug;
+			 return chooser.getSelectedFile();
 		} else {
 			return null;
 		}
 	}
-	
+
 }
