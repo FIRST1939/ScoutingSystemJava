@@ -6,10 +6,14 @@ import java.util.Vector;
 
 import javax.swing.JLabel;
 
-import elements.FileUtils;
-import elements.RobotPanel;
-import elements.UIV2;
+import buildingBlocks.RobotTabbedPanel;
+import buildingBlocks.UIV3;
 
+/**
+ * This class manages the exportation of data to a csv file. 
+ * @author Grayson Spidle
+ *
+ */
 public class ExportData {
 	
 	private static Vector<String> teamNumbers = new Vector<String>();
@@ -24,10 +28,10 @@ public class ExportData {
 	private static ArrayList<Vector<String>> teleoperatedOutput = new ArrayList<Vector<String>>();
 	
 	/**
-	 * Exports stuff
-	 * @param ui
+	 * Exports the two files with the team numbers, score labels, and scores
+	 * @param ui The UI to find all this information.
 	 */
-	public static void toCSV(UIV2 ui) {
+	public static void toCSV(UIV3 ui) {
 		
 		System.out.println("Exporting data to .csv");
 		
@@ -86,29 +90,40 @@ public class ExportData {
 		
 	}
 	
-	private static void getRobotNumbers(UIV2 ui) {
-		for (RobotPanel rp : ui.panels) {
+	/**
+	 * Gets all robot numbers from the panels in the specified ui.
+	 * @param ui The UI to get the robot numbers.
+	 */
+	private static void getRobotNumbers(UIV3 ui) {
+		for (RobotTabbedPanel rp : ui.panels) {
 			teamNumbers.add(rp.getTeamNumber());
 		}
 	}
 	
-	private static void getScoreLabels(UIV2 ui) {
+	/**
+	 * Gets all score labels in the specified ui from the autonomous.scoreLabels and teleoperated.scoreLabels arrays.
+	 * @param ui The UI to get the score labels.
+	 */
+	private static void getScoreLabels(UIV3 ui) {
 		autonomousScoreLabels.add("");
 		teleoperatedScoreLabels.add("");
 		
-		for (JLabel l : ui.panels.get(0).autonomous.scoreLabels) {
+		for (JLabel l : ui.panels.get(0).autonomous.labels) {
 			autonomousScoreLabels.add(l.getText());
 		}
-		for (JLabel l : ui.panels.get(0).teleoperated.scoreLabels) {
+		for (JLabel l : ui.panels.get(0).teleoperated.labels) {
 			teleoperatedScoreLabels.add(l.getText());
 		}
 	}
 	
-	
-	private static void getScores(UIV2 ui) {
+	/**
+	 * Gets the scores from the specified ui from the ui.getAutonomousScores() and ui.getTeleoperatedScores() methods.
+	 * @param ui The UI to get the score labels.
+	 */
+	private static void getScores(UIV3 ui) {
 		
 		// Autonomous
-		for (int i = 0; i < ui.panels.get(0).autonomous.scoreFields.size(); i++) {
+		for (int i = 0; i < ui.panels.get(0).autonomous.fields.size(); i++) {
 			String temp = ui.getAutonomousScores(i).toString();
 			temp = temp.replace("[", "");
 			temp = temp.replace("]", "");
@@ -118,7 +133,7 @@ public class ExportData {
 		}
 		
 		// Teleoperated
-		for (int i = 0; i < ui.panels.get(0).teleoperated.scoreFields.size(); i++) {
+		for (int i = 0; i < ui.panels.get(0).teleoperated.fields.size(); i++) {
 			String temp = ui.getTeleoperatedScores(i).toString();
 			temp = temp.replace("[", "");
 			temp = temp.replace("]", "");

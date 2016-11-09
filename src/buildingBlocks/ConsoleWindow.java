@@ -1,4 +1,4 @@
-package elements;
+package buildingBlocks;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ * This class constructs the ConsoleWindow ui and diverts all outputs from the system console to this ui.
+ * @author Grayson Spidle
+ *
+ */
 public class ConsoleWindow extends JFrame implements ActionListener {
+	
 	private static final long serialVersionUID = 5144300131763756053L;
 	
 	private Font font = new Font("Tahoma", Font.PLAIN, 15);
@@ -30,6 +36,9 @@ public class ConsoleWindow extends JFrame implements ActionListener {
 	public PrintStream out;
 	public PrintStream err;
 
+	/**
+	 * The constructor. Initializing this constructor automatically diverts all outputs from the system console to this ui.
+	 */
 	public ConsoleWindow() {
 		
 		area = new JTextArea();
