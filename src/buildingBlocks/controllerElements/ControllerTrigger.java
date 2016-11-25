@@ -1,10 +1,10 @@
-package controllerElements;
+package buildingBlocks.controllerElements;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Used to parse inputs from a GamepadController trigger inputs. Use ControllerButton for the StickController type.
+ * This class manages the values of a trigger on a controller. Typically used for a GamepadController.
  * @author Grayson Spidle
  *
  */
@@ -21,7 +21,7 @@ public class ControllerTrigger implements ActionListener {
 	
 	/**
 	 * The constructor.
-	 * @param number The number that is used to check if the trigger has been pulled down. Use the static numbers in this class.
+	 * @param number The number that is used to check if the trigger has been pulled down. Use the static numbers from this class.
 	 */
 	public ControllerTrigger(int number) {
 		current = false;

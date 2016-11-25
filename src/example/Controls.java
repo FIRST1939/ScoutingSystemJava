@@ -1,65 +1,64 @@
-package elements;
+package example;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import controllerElements.GamepadController;
-import controllerElements.StickController;
-import net.java.games.input.Controller;
+import buildingBlocks.ControlScheme;
+import buildingBlocks.RobotTabbedPanel;
+import buildingBlocks.UIV3;
+import buildingBlocks.controllerElements.GamepadController;
+import buildingBlocks.controllerElements.StickController;
+
 /**
- * A class for creating the controls. This one should be flexible with the difference in controller types.
+ * This class governs modifies the UI according to controller inputs. It is flexible with the difference in controller types.
  * @author Grayson Spidle
  *
  */
-public class ControlScheme {
+public class Controls extends ControlScheme {
 	
-	private UIV2 ui;
 	private final long DELAY = 10; // Milliseconds
-	public ActionListener autonomousControls;
-	public ActionListener teleoperatedControls;
-	public Controller.Type type;
 	
-	public ControlScheme(UIV2 arg0) {
-		
-		ui = arg0;
-		autonomousControls = new ActionListener() {
+	/**
+	 * The constructor. Creates 2 ActionListeners for the user to use.
+	 * @param arg0 The UI the ControlScheme should modify.
+	 */
+	public Controls(UIV3 arg0) {
+		super(arg0);
+		setAutonomousActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
 					GamepadController controller = (GamepadController) e.getSource();
-					RobotPanel panel = ui.getRobotPanel(controller.robotPanelNumber);
+					RobotTabbedPanel panel = ui.getRobotTabbedPanel(controller.robotPanelNumber);
 					
 					if (controller.isAPressed()) { // This is just for testing
-						int value = Integer.parseInt(panel.autonomous.score1Field.getText());
+						int value = Integer.parseInt(panel.autonomous.fields.get(0).getText());
 						value++;
-						panel.autonomous.score1Field.setText("" + value);
-						
-					}
-					
-					// Switches between autonomous and teleoperated and their respective control schemes
-					if (controller.isStartPressed()) {
-						if (panel.getSelectedIndex()==0) panel.setSelectedIndex(1);
-						else if (panel.getSelectedIndex()==1) panel.setSelectedIndex(0);
-						controller.setActionListener(teleoperatedControls);
-					}
-					
-				} catch (ClassCastException e1) {
-					StickController controller = (StickController) e.getSource();
-					RobotPanel panel = ui.getRobotPanel(controller.robotPanelNumber);
-					
-					if (controller.isAPressed()) { // This is just for testing
-						int value = Integer.parseInt(panel.autonomous.score1Field.getText());
-						value++;
-						panel.autonomous.score1Field.setText("" + value);
-						
+						panel.autonomous.fields.get(0).setText("" + value);
 					}
 					
 					// Switches between autonomous and teleoperated and their respective control schemes
 					if (controller.isStartPressed()) {
 						panel.setSelectedIndex(1);
-						controller.setActionListener(teleoperatedControls);
+						controller.setActionListener(teleoperated);
+					}
+					
+				} catch (ClassCastException e1) {
+					StickController controller = (StickController) e.getSource();
+					RobotTabbedPanel panel = ui.getRobotTabbedPanel(controller.robotPanelNumber);
+					
+					if (controller.isAPressed()) { // This is just for testing
+						int value = Integer.parseInt(panel.autonomous.fields.get(0).getText());
+						value++;
+						panel.autonomous.fields.get(0).setText("" + value);
+					}
+					
+					// Switches between autonomous and teleoperated and their respective control schemes
+					if (controller.isStartPressed()) {
+						panel.setSelectedIndex(1);
+						controller.setActionListener(teleoperated);
 					}
 				}
 				
@@ -67,66 +66,69 @@ public class ControlScheme {
 				try {
 					Thread.sleep(DELAY);
 				} catch (InterruptedException e1) {
+					System.err.println("Unable to sleep the thread.");
 					e1.printStackTrace();
 				}
 				
 			}
-		};
+		});
 		
-		teleoperatedControls = new ActionListener() {
+		setTeleoperatedActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					GamepadController controller = (GamepadController) e.getSource();
-					RobotPanel panel = ui.getRobotPanel(controller.robotPanelNumber);
+					RobotTabbedPanel panel = ui.getRobotTabbedPanel(controller.robotPanelNumber);
 					
-					if (controller.a.isPressed()) { // This is just for testing
-						int value = Integer.parseInt(panel.teleoperated.score1Field.getText());
+					if (controller.isAPressed()) { // This is just for testing
+						int value = Integer.parseInt(panel.teleoperated.fields.get(0).getText());
 						value++;
-						panel.teleoperated.score1Field.setText("" + value);
+						panel.teleoperated.fields.get(0).setText("" + value);
 					}
 					
 					
 					// Switches between autonomous and teleoperated and their respective control schemes
 					if (controller.isStartPressed()) { 
 						panel.setSelectedIndex(0);
-						controller.setActionListener(autonomousControls);
+						controller.setActionListener(autonomous);
 					}
 					
 					// Suspends the thread for DELAY amount of miliseconds
 					try {
 						Thread.sleep(DELAY);
+						System.err.println("Unable to sleep the thread.");
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
 				} catch (ClassCastException e2) {
 					StickController controller = (StickController) e.getSource();
-					RobotPanel panel = ui.getRobotPanel(controller.robotPanelNumber);
+					RobotTabbedPanel panel = ui.getRobotTabbedPanel(controller.robotPanelNumber);
 					
-					if (controller.a.isPressed()) { // This is just for testing
-						int value = Integer.parseInt(panel.teleoperated.score1Field.getText());
+					if (controller.isAPressed()) { // This is just for testing
+						int value = Integer.parseInt(panel.teleoperated.fields.get(0).getText());
 						value++;
-						panel.teleoperated.score1Field.setText("" + value);
+						panel.teleoperated.fields.get(0).setText("" + value);
 					}
 					
 					
 					// Switches between autonomous and teleoperated and their respective control schemes
 					if (controller.isStartPressed()) { 
 						panel.setSelectedIndex(0);
-						controller.setActionListener(autonomousControls);
+						controller.setActionListener(autonomous);
 					}
 					
 					// Suspends the thread for DELAY amount of miliseconds
 					try {
 						Thread.sleep(DELAY);
 					} catch (InterruptedException e1) {
+						System.err.println("Unable to sleep the thread.");
 						e1.printStackTrace();
 					}
 				}
 				
 			}
-		};
+		});
 		
 	}
 	

@@ -1,21 +1,19 @@
-package controllerElements;
+package buildingBlocks.controllerElements;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import elements.UIV2;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 
 /**
- * A class that handles Stick type controller inputs.
- * 
+ * A class that handles the inputs of the Controller.Type Stick.
  * @author Grayson Spidle
  *
  */
 public class StickController {
 
-	Controller controller;
+	public Controller controller;
 
 	public static final int ANALOG_ERROR = -1;
 	public static final int ANALOG_NEUTRAL = 0;
@@ -69,7 +67,6 @@ public class StickController {
 	 * Call this method to get controller input (does not contain a loop)
 	 */
 	public void pollControllerInput() {
-
 		analogValue = 0.0f;
 
 		controller.poll();
@@ -149,62 +146,138 @@ public class StickController {
 		}
 	}
 
+	/**
+	 * Returns if a was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isAPressed() {
 		return a.isPressed();
 	}
-
+	
+	/**
+	 * Returns if b was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isBPressed() {
 		return b.isPressed();
 	}
 
+	/**
+	 * Returns if x was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isXPressed() {
 		return x.isPressed();
 	}
 
+	/**
+	 * Returns if y was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isYPressed() {
 		return y.isPressed();
 	}
 
+	/**
+	 * Returns if lb was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isLBPressed() {
 		return lb.isPressed();
 	}
 
+	/**
+	 * Returns if rb was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isRBPressed() {
 		return rb.isPressed();
 	}
 
+	/**
+	 * Returns if the left stick was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isLSPressed() {
 		return ls.isPressed();
 	}
 
+	/**
+	 * Returns if right stick was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isRSPressed() {
 		return rs.isPressed();
 	}
 
+	/**
+	 * Returns if lt was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isLTPressed() {
 		return lt.isPressed();
 	}
-
+	
+	/**
+	 * Returns if lt is held down.
+	 * @return Returns true if the button is held down returns false if it is not held down.
+	 */
+	public boolean isLTHeld() {
+		return lt.isHeld();
+	}
+	
+	/**
+	 * Returns if rt was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isRTPressed() {
 		return rt.isPressed();
 	}
+	
+	/**
+	 * Returns if rt is held down.
+	 * @return Returns true if the button is held down returns false if it is not held down.
+	 */
+	public boolean isRTHeld() {
+		return rt.isHeld();
+	}
 
+	/**
+	 * Returns if start was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isStartPressed() {
 		return start.isPressed();
 	}
-
+	
+	/**
+	 * Returns if back was pressed.
+	 * @return Returns true if the button was pressed and returns false if it was not pressed.
+	 */
 	public boolean isBackPressed() {
 		return back.isPressed();
 	}
-
+	
+	/**
+	 * Returns the left stick's direction.
+	 * @return Returns an integer reflecting the sticks direction.
+	 */
 	public int getLeftStick() {
 		return leftStick;
 	}
 
+	/**
+	 * Returns the right stick's direction.
+	 * @return Returns an integer reflecting the sticks direction.
+	 */
 	public int getRightStick() {
 		return rightStick;
 	}
 
+	/**
+	 * Sets the controller's input listener.
+	 * @param arg0 The specified ActionListener for the controller to output its controls.
+	 */
 	public void setActionListener(ActionListener arg0) {
 		listener = arg0;
 	}

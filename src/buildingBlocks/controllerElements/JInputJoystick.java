@@ -1,4 +1,4 @@
-package controllerElements;
+package buildingBlocks.controllerElements;
 
 import java.util.ArrayList;
 import net.java.games.input.Component;

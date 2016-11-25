@@ -1,12 +1,11 @@
-package controllerElements;
+package buildingBlocks.controllerElements;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import elements.UIV2;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 /**
- * A class that handles Gamepad type controller inputs.
+ * A class that handles the inputs of the Controller.Type Stick.
  * @author Grayson Spidle
  *
  */
