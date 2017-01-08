@@ -2,14 +2,21 @@ package buildingBlocks;
 
 import javax.swing.JLabel;
 
-public class ScoreLabel extends JLabel {
+/**
+ * Use this object to ensure this label is written to the .csv file.
+ * @author Grayson Spidle
+ */
+public final class ScoreLabel extends JLabel {
 	
-	public ScoreLabel() {
-		super();
-	}
+	private static final long serialVersionUID = 893696234559085710L;
 	
 	public ScoreLabel(String arg0) {
 		super(arg0);
+		this.setName(arg0);
 	}
-
+	
+	public String toString() {
+		return this.getText();
+	}
+	
 }

@@ -2,17 +2,15 @@ package buildingBlocks.controllerElements;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import buildingBlocks.RobotPanel;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 /**
- * A class that handles the inputs of the Controller.Type Stick.
+ * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type Controller.Type} Gamepad.
  * @author Grayson Spidle
- *
  */
-public class GamepadController {
+public class GamepadController extends JController {
 	
-	public Controller controller;
-
 	public static final int ANALOG_ERROR = -1;
 	public static final int ANALOG_NEUTRAL = 0;
 	public static final int ANALOG_UP = 1;
@@ -37,7 +35,6 @@ public class GamepadController {
 	public int leftStick = ANALOG_NEUTRAL;
 	public int rightStick = ANALOG_NEUTRAL;
 	
-	private ActionListener listener;
 	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
 	
 	public int robotPanelNumber = -1;
@@ -50,9 +47,8 @@ public class GamepadController {
 	 * @param arg0 The controller from which the inputs will be parsed.
 	 * @param controlsWhichRobotPanel The designated robotPanel on the UI that this controller will control.
 	 */
-	public GamepadController(Controller arg0, int controlsWhichRobotPanel) {
-		controller = arg0;
-		robotPanelNumber = controlsWhichRobotPanel;
+	public GamepadController(net.java.games.input.Controller arg0, int controlsWhichRobotPanel) {
+		super(arg0, controlsWhichRobotPanel);
 	}
 	
 	/**
@@ -106,6 +102,9 @@ public class GamepadController {
 						}
 					}
 				};
+				
+				setStickAnalogValues.run();
+				
 			} 
 			else {
 				if (components[i].getPollData() == 1.0f) value = true;
@@ -193,8 +192,9 @@ public class GamepadController {
 		return rightStick;
 	}
 	
-	public void setActionListener(ActionListener arg0) {
-		listener = arg0;
+	@Override
+	public boolean isBackPressed() {
+		return back.isPressed();
 	}
 	
 }

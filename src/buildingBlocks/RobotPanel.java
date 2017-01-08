@@ -1,48 +1,66 @@
 package buildingBlocks;
 
+import java.awt.Component;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * This class manages the values of all the {@link buildingBlocks.ScoreField ScoreFields}, {@link buildingBlocks.ScoreLabel ScoreLabels}, and the {@link buildingBlocks.RobotNumber RobotNumber}.
+ * Future subclasses should not need to do anything else but extend this class. 
+ * Whenever you add a {@link buildingBlocks.ScoreField ScoreFields}, {@link buildingBlocks.ScoreLabel ScoreLabels}, or a {@link buildingBlocks.RobotNumber RobotNumber} it will automatically
+ * add it to the labels and fields and number objects
+ * @author Grayson Spidle
+ *
+ */
 public abstract class RobotPanel extends JPanel {
 	private static final long serialVersionUID = -5432138303534530552L;
 	
-	private int panelNumber = -1;
-	
 	public RobotNumber number = new RobotNumber();
-	public Vector<ScoreLabel> labels = new Vector<ScoreLabel>();
-	public Vector<ScoreField> fields = new Vector<ScoreField>();
+	public List<ScoreLabel> labels;
+	public List<ScoreField> fields;
 	
 	/**
 	 * The constructor.
 	 */
 	public RobotPanel() {
+		labels = new Vector<ScoreLabel>();
+		fields = new Vector<ScoreField>();
 		this.addContainerListener(new ContainerListener() {
 
 			@Override
 			public void componentAdded(ContainerEvent arg0) {
-				if (arg0.getChild().getClass().equals(ScoreLabel.class)) {
-					labels.add((ScoreLabel) arg0.getChild());
+				Component c = arg0.getChild();
+				if (c.getClass().isAssignableFrom(ScoreLabel.class)) {
+					ScoreLabel label = (ScoreLabel) c;
+					labels.add(label);
 				}
-				else if (arg0.getChild().getClass().equals(ScoreField.class)) {
-					fields.add((ScoreField) arg0.getChild());
+				if (c.getClass().isAssignableFrom(ScoreField.class)) {
+					ScoreField field = (ScoreField) c;
+					fields.add(field);
 				}
-				else if (arg0.getChild().getClass().equals(RobotNumber.class)) {
-					number = (RobotNumber) arg0.getChild();
+				if (c.getClass().isAssignableFrom(RobotNumber.class)) {
+					number = (RobotNumber) c;
 				}
 			}
 
 			@Override
 			public void componentRemoved(ContainerEvent arg0) {
-				if (arg0.getChild().getClass().equals(ScoreLabel.class)) {
-					labels.remove((ScoreLabel) arg0.getChild());
+				Component c = arg0.getChild();
+				if (c.getClass().isAssignableFrom(ScoreLabel.class)) {
+					labels.remove((ScoreLabel) c);
 				}
-				else if (arg0.getChild().getClass().equals(ScoreField.class)) {
-					fields.remove((ScoreField) arg0.getChild());
+				else if (c.getClass().isAssignableFrom(ScoreField.class)) {
+					fields.remove((ScoreField) c);
 				}
-				else if (arg0.getChild().getClass().equals(RobotNumber.class)) {
+				else if (c.getClass().isAssignableFrom(RobotNumber.class)) {
 					number = null;
 				}
 			}

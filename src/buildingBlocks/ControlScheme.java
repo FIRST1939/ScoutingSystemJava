@@ -4,13 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * This class governs modifies the UI according to controller inputs. It is flexible with the difference in controller types.
+ * This class modifies the {@link buildingBlocks.UIV3 UI} according to inputs from a controller.
+ * Future subclasses must identify an {@link java.awt.event.ActionListener ActionListener} for autonomous and teleoperated modes. 
  * @author Grayson Spidle
  *
  */
 public abstract class ControlScheme implements ActionListener {
 	
-	public UIV3 ui;
+	public static UIV3 ui;
 	public ActionListener autonomous;
 	public ActionListener teleoperated;
 	

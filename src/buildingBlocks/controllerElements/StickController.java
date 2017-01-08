@@ -1,19 +1,15 @@
 package buildingBlocks.controllerElements;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import buildingBlocks.RobotPanel;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
-
 /**
- * A class that handles the inputs of the Controller.Type Stick.
+ * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type Controller.Type} Stick.
  * @author Grayson Spidle
- *
  */
-public class StickController {
-
-	public Controller controller;
+public class StickController extends JController {
 
 	public static final int ANALOG_ERROR = -1;
 	public static final int ANALOG_NEUTRAL = 0;
@@ -42,8 +38,6 @@ public class StickController {
 	private ActionListener listener;
 	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
 
-	public int robotPanelNumber = -1;
-
 	boolean value = false;
 	public float analogValue = 0.0f;
 	
@@ -52,15 +46,8 @@ public class StickController {
 	 * @param arg0 The controller from which the inputs will be parsed.
 	 * @param controlsWhichRobotPanel The designated robotPanel on the UI that this controller will control.
 	 */
-	public StickController(Controller arg0, int controlsWhichRobotPanel) {
-
-		controller = arg0;
-
-		leftStick = ANALOG_NEUTRAL;
-		rightStick = ANALOG_NEUTRAL;
-
-		robotPanelNumber = controlsWhichRobotPanel;
-
+	public StickController(net.java.games.input.Controller arg0, int controlsWhichRobotPanel) {
+		super(arg0, controlsWhichRobotPanel);
 	}
 
 	/**

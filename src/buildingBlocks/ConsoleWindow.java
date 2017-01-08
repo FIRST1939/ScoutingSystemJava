@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -16,8 +17,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import tools.ImageUtils;
+
 /**
- * This class constructs the ConsoleWindow ui and diverts all outputs from the system console to this ui.
+ * This class writes outputs from the <code>System.out</code> and <code>System.err</code> {@link java.io.PrintStream PrintStreams} and writes their outputs a {@link javax.swing.JTextArea JTextArea}
+ * which is in a {@link javax.swing.JScrollPane JScrollPane}.
  * @author Grayson Spidle
  *
  */
@@ -33,11 +37,13 @@ public class ConsoleWindow extends JFrame implements ActionListener {
 	public JMenu menuTools;
 	public JMenuItem itemClear;
 	
+	public File logoFile = new File("logo.png");
+	
 	public PrintStream out;
 	public PrintStream err;
 
 	/**
-	 * The constructor. Initializing this constructor automatically diverts all outputs from the system console to this ui.
+	 * Initializing this constructor automatically diverts all outputs from the system console to this ui.
 	 */
 	public ConsoleWindow() {
 		
@@ -84,6 +90,7 @@ public class ConsoleWindow extends JFrame implements ActionListener {
 		this.add(scroll);
 		this.setSize(250, 350);
 		this.setTitle("System Console");
+		this.setIconImage(ImageUtils.read(logoFile));
 		this.setJMenuBar(menuBar);
 		this.addWindowListener(new WindowListener() {
 			

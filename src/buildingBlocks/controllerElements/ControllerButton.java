@@ -4,9 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * This class manages the values of a button on a controller.
+ * This class manages the values of a button on a controller. It does this by utilizing an {@link java.awt.event.ActionListener ActionListener}.
+ * It expects the {@link java.awt.event.ActionEvent ActionEvent} source to be either a {@link buildingBlocks.controllerElements.GamepadController GamepadController}
+ * or a {@link buildingBlocks.controllerElements.StickController StickController}. 
  * @author Grayson Spidle
- *
  */
 public class ControllerButton implements ActionListener {
 	

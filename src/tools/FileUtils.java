@@ -23,13 +23,20 @@ public class FileUtils {
 	 * @throws FileNotFoundException Pasted from PrinterWriter - If the given file object does not denote an existing, writable regular file and a new regular file of that name cannot be created, or if some other error occurs while opening or creating the file
 	 */
 	public static void write(File file, ArrayList<Vector<String>> lines) throws FileNotFoundException {
-		
 		PrintWriter output = new PrintWriter(file);
 		for (int i = 0; i < lines.size(); i++) {
 			String temp = lines.get(i).toString();
 			temp = temp.replace("[", "");
 			temp = temp.replace("]", "");
 			output.println(temp);
+		}
+		output.close();
+	}
+	
+	public static void write(File file, List<? extends Object> lines) throws FileNotFoundException {
+		PrintWriter output = new PrintWriter(file);
+		for (Object o : lines) {
+			output.println(o.toString());
 		}
 		output.close();
 	}

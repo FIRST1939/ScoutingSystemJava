@@ -4,9 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * This class manages the values of a trigger on a controller. Typically used for a GamepadController.
+ * This class manages the values of a trigger on a controller. 
+ * Typically is used for the {@link buildingBlocks.controllerElements.GamepadController GamepadController}.
+ * 
  * @author Grayson Spidle
- *
  */
 public class ControllerTrigger implements ActionListener {
 	
@@ -21,14 +22,25 @@ public class ControllerTrigger implements ActionListener {
 	
 	/**
 	 * The constructor.
-	 * @param number The number that is used to check if the trigger has been pulled down. Use the static numbers from this class.
+	 * @param number The number that is used to distinguish which trigger has been pulled down. Use the ControllerTrigger.LEFT_TRIGGER or ControllerTrigger.RIGHT_TRIGGER.
 	 */
-	public ControllerTrigger(int number) {
+	public ControllerTrigger(int number) throws IllegalArgumentException {
 		current = false;
 		previous = current;
 		isPressed = false;
 		isHeld = false;
-		maxAnalogValue = number;
+		if (number != LEFT_TRIGGER && number != RIGHT_TRIGGER) {
+			try {
+				finalize();
+				throw new IllegalArgumentException("The number parameter must be 1 or -1");
+			} catch (Throwable e) {
+				e = new Throwable(e.getMessage() + " \n The number parameter must be 1 or -1", e);
+				e.printStackTrace();
+			}
+		}
+		else {
+			maxAnalogValue = number;
+		}
 	}
 
 	@Override

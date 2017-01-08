@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -15,12 +16,12 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
  * @author Grayson Spidle
  *
  */
-public abstract class RobotTabbedPanel extends JTabbedPane {
+public abstract class RobotTabbedPanel<K extends RobotPanel,V extends RobotPanel> extends JTabbedPane {
 	
 	private static final long serialVersionUID = 4952300412598887831L;
 	
-	public RobotPanel autonomous;
-	public RobotPanel teleoperated;
+	public K autonomous;
+	public V teleoperated;
 	
 	public Color allianceColor = null;
 	
@@ -29,7 +30,7 @@ public abstract class RobotTabbedPanel extends JTabbedPane {
 	 * @param autonomous The autonomous panel.
 	 * @param teamColor The teleoperated panel.
 	 */
-	public RobotTabbedPanel(RobotPanel autonomous, RobotPanel teleoperated) {
+	public RobotTabbedPanel(K autonomous, V teleoperated) {
 		
 		this.autonomous = autonomous;
 		this.teleoperated = teleoperated;
@@ -75,12 +76,6 @@ public abstract class RobotTabbedPanel extends JTabbedPane {
 			field.setEditable(arg0);
 		}
 	}
-	
-	/**
-	 * Sets the displayed team number for the panel.
-	 * @param arg0 The team number to change.
-	 */
-	public abstract void setTeamNumber(String arg0);
 	
 	/**
 	 * Gets the team number.
