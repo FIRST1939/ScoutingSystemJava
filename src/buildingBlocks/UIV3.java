@@ -46,6 +46,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 
 	protected final JMenuItem ITEM_IMPORT_TEAM_NUMBERS = new JMenuItem("Import Team Numbers");
 	protected final JMenuItem ITEM_TO_CSV = new JMenuItem("to .csv");
+	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Dream");
 	protected final JMenuItem ITEM_SHOW_CONSOLE = new JMenuItem("Show Console");
 	
 	public JPanel contentPane = new JPanel();
@@ -56,6 +57,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 
 	public final ConsoleWindow CONSOLE = new ConsoleWindow();
+	public final Teamimports TI = new Teamimports();
 	
 	private boolean editability = false;
 
@@ -72,6 +74,10 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 		ITEM_TO_CSV.setActionCommand("convert to csv");
 		ITEM_TO_CSV.addActionListener(this);
 		ITEM_TO_CSV.setName("itemToCSV");
+		
+		ITEM_TEAM_GET.setActionCommand("get Teams");
+		ITEM_TEAM_GET.addActionListener(this);
+		ITEM_TEAM_GET.setName("getTeams");
 
 		ITEM_IMPORT_TEAM_NUMBERS.setActionCommand("update team numbers");
 		ITEM_IMPORT_TEAM_NUMBERS.addActionListener(this);
@@ -92,6 +98,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 
 		MENU_COMPETITION.setText("Competition");
 		MENU_COMPETITION.add(ITEM_IMPORT_TEAM_NUMBERS);
+		MENU_COMPETITION.add(ITEM_TEAM_GET);
 		MENU_COMPETITION.setName("menuCompetition");
 		MENU_BAR.add(MENU_COMPETITION);
 		
@@ -113,10 +120,15 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	// This is where the action listeners are managed for this class (not for the controller inputs)
 	@Override
 	public void actionPerformed(ActionEvent event) { 
+		
 		if (event.getActionCommand().equals("convert to csv")) {// CSV conversion
 			getSaveLocation();
 			ExportData.toCSV(this);
 		} 
+		else if (event.getActionCommand().equals("get Teams")){
+			TI.setVisible(true);
+			
+		}
 		else if (event.getActionCommand().equals("update team numbers")) { // Updates team numbers from a comma separated value list in a txt file
 			try {
 				File file = getEvent();
