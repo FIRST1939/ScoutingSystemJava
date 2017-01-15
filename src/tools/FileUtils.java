@@ -51,9 +51,6 @@ public class FileUtils {
 		List<String> lines = Files.readAllLines(file.toPath());
 		return lines;
 	}
-	public static List<String> readAll(File file) throws IOException {
-		List<String> lines = Files.readAllLines(file.toPath());
-		return lines;
-	}
+	
 
 }
