@@ -196,6 +196,12 @@ public class GamepadController extends JController {
 	public boolean isBackPressed() {
 		return back.isPressed();
 	}
+
+	@Override
+	public boolean isLSHeld() {
+		// TODO Auto-generated method stub
+		return ls.isHeld();
+	}
 	
 }
 	

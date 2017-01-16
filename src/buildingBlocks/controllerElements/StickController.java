@@ -269,4 +269,10 @@ public class StickController extends JController {
 		listener = arg0;
 	}
 
+	@Override
+	public boolean isLSHeld() {
+		// TODO Auto-generated method stub
+		return ls.isHeld();
+	}
+
 }
