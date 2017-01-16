@@ -148,11 +148,18 @@ public class TeamImport extends JFrame {
 		List<String> the = new ArrayList<String>();
 		try {
 			the =  getTeamNumbers(textField.getText());
-			String adding = "";
+			String adding = "{";
 			for (int i = 0; i<the.size(); i++){
+				if(i == the.size()-1){
+					adding = adding +the.get(i);
+				}
+				else{
 				adding = adding +the.get(i) + ",";
-				System.out.println("Fuck You paul: " + adding);
+				}
+				
 			}
+			adding = adding +"}";
+			System.out.println("Fuck You paul: " + adding);
 			 
 			output.add(adding);
 			System.out.println(output.toString());
@@ -166,29 +173,26 @@ public class TeamImport extends JFrame {
 	
 	private final void write(JButton ep){
 		
+		File file = new File("FUCK.txt");
+		
+		System.out.println(file.getAbsolutePath());
 		try {
-			//Create a file chooser
-			final JFileChooser fc = new JFileChooser();
-			fc.setCurrentDirectory(this.defaultSaveFile);
-			fc.setDialogTitle("Saving...");
-			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			if (fc.showOpenDialog(ep) == JFileChooser.APPROVE_OPTION){
-				
-			}
-			String path = fc.getSelectedFile().getAbsolutePath();
-			System.out.println(path);
-			File file = new File(path);
 			PrintWriter PW = new PrintWriter(file);
-			PW.write(this.listToString());
+			PW.write(output.toString());
 			PW.flush();
 			PW.close();
-			
-				} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		}
+	}	
+	
 	private static JsonReader createMatchJsonReader(String matchId) throws IOException {
 		try {
 			URL url = new URL(MATCH_URL_BASE + matchId + URL_END);

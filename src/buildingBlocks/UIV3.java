@@ -24,6 +24,8 @@ import javax.swing.JToggleButton;
 import tools.ExportData;
 import tools.FileUtils;
 import tools.ImageUtils;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * The UI class where the main UI can be found. Is a subclass to JFrame and is an ActionListener.
@@ -46,7 +48,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 
 	protected final JMenuItem ITEM_IMPORT_TEAM_NUMBERS = new JMenuItem("Import Team Numbers");
 	protected final JMenuItem ITEM_TO_CSV = new JMenuItem("to .csv");
-	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Dream");
+	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Next Dream");
 	protected final JMenuItem ITEM_SHOW_CONSOLE = new JMenuItem("Show Console");
 	
 	public JPanel contentPane = new JPanel();
@@ -60,6 +62,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	public final TeamImport TI = new TeamImport();
 	
 	private boolean editability = false;
+	private final JMenuItem mntmTeamGetterThing = new JMenuItem("TEAM GETTER THING");
 
 	/**
 	 * Create the frame. Is not initially set to be visible
@@ -97,6 +100,14 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 		MENU_BAR.add(MENU_EXPORT);
 
 		MENU_COMPETITION.setText("Competition");
+		mntmTeamGetterThing.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				TI.setVisible(true);
+			}
+		});
+		
+		MENU_COMPETITION.add(mntmTeamGetterThing);
 		MENU_COMPETITION.add(ITEM_IMPORT_TEAM_NUMBERS);
 		MENU_COMPETITION.add(ITEM_TEAM_GET);
 		MENU_COMPETITION.setName("menuCompetition");
