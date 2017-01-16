@@ -57,7 +57,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 
 	public final ConsoleWindow CONSOLE = new ConsoleWindow();
-	public final Teamimports TI = new Teamimports();
+	public final TeamImport TI = new TeamImport();
 	
 	private boolean editability = false;
 
