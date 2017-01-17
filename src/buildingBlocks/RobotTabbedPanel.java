@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 
-import javax.swing.JPanel;
+
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
+import memerbeens.FocusTraversalOnArray;
+
+
 
 /**
  * This class manages a panel that governs the Autonomous and Teleoperated panels.

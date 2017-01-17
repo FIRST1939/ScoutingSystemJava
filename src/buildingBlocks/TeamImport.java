@@ -151,7 +151,7 @@ public class TeamImport extends JFrame {
 					adding = adding +the.get(i);
 				}
 				else{
-				adding = adding +the.get(i) + ",";
+				adding = adding +the.get(i) + ",  ";
 				}
 				
 			}
