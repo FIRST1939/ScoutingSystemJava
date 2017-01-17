@@ -3,6 +3,7 @@ package buildingBlocks;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -44,6 +47,9 @@ public class TeamImport extends JFrame {
 	ArrayList<String> output = new ArrayList<String>();
 	public static String name = "";
 	private names N = new names();
+	public PrintStream out;
+	public PrintStream err;
+	public JTextArea area;
 	
 	
 	
@@ -81,6 +87,27 @@ public class TeamImport extends JFrame {
 	 * Create the frame.
 	 */
 	public TeamImport() {
+		out = new PrintStream(new OutputStream() {
+
+			@Override
+			public void write(int b) throws IOException {
+				char c = (char) b;
+				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
+			}
+			
+		});
+		
+		err = new PrintStream(new OutputStream() {
+
+			@Override
+			public void write(int b) throws IOException {
+				char c = (char) b;
+				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
+			}
+			
+		});
+		System.setOut(out);
+		System.setErr(err);
 		setForeground(Color.WHITE);
 		setTitle("MEMER");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -90,9 +117,9 @@ public class TeamImport extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(10, 42, 414, 209);
-		contentPane.add(textArea);
+		area = new JTextArea();
+		area.setBounds(10, 42, 414, 209);
+		contentPane.add(area);
 		
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
@@ -131,6 +158,16 @@ public class TeamImport extends JFrame {
 		contentPane.add(btnSave);
 		
 		
+		
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("write")) {
+			char c = (char) e.getSource();
+			area.setText(area.getText() + c);
+		}
+		else if (e.getActionCommand().equals("clear")) {
+			area.setText("");
+		}
 	}
 	private String listToString(){
 		String out = "";
@@ -172,10 +209,12 @@ public class TeamImport extends JFrame {
 		
 		File file = new File(name + ".txt");
 		
-		System.out.println(file.getAbsolutePath());
+		System.out.println("File at: " + file.getAbsolutePath());
 		try {
 			PrintWriter PW = new PrintWriter(file);
-			PW.write(output.toString());
+			String outpp = output.toString();
+			outpp.replaceAll("},", "} \n");
+			PW.write(outpp);
 			PW.flush();
 			PW.close();
 		} catch (FileNotFoundException e1) {
@@ -226,6 +265,7 @@ public class TeamImport extends JFrame {
 		
 		return output;
 	}
+	
 	private static List<String> readAlliances(JsonReader reader) throws IOException {
 		List<String> output = new Vector<String>();
 		reader.beginObject();
