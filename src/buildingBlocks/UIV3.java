@@ -136,10 +136,6 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 			getSaveLocation();
 			ExportData.toCSV(this);
 		} 
-		else if (event.getActionCommand().equals("get Teams")){
-			TI.setVisible(true);
-			
-		}
 		else if (event.getActionCommand().equals("update team numbers")) { // Updates team numbers from a comma separated value list in a txt file
 			try {
 				File file = getEvent();

@@ -42,6 +42,8 @@ public class TeamImport extends JFrame {
 	private JTextField textField;
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 	ArrayList<String> output = new ArrayList<String>();
+	public static String name = "";
+	private names N = new names();
 	
 	
 	
@@ -81,7 +83,7 @@ public class TeamImport extends JFrame {
 	public TeamImport() {
 		setForeground(Color.WHITE);
 		setTitle("MEMER");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -108,16 +110,11 @@ public class TeamImport extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Enter");
+		JButton btnNewButton = new JButton("Edit Name");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				try {
-					System.out.println(getTeamNumbers("2016mokc_qm20"));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				N.setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(10, 8, 69, 23);
@@ -159,7 +156,7 @@ public class TeamImport extends JFrame {
 				
 			}
 			adding = adding +"}";
-			System.out.println("Fuck You paul: " + adding);
+			System.out.println("Successfully got: " + adding);
 			 
 			output.add(adding);
 			System.out.println(output.toString());
@@ -173,7 +170,7 @@ public class TeamImport extends JFrame {
 	
 	private final void write(JButton ep){
 		
-		File file = new File("FUCK.txt");
+		File file = new File(name + ".txt");
 		
 		System.out.println(file.getAbsolutePath());
 		try {
