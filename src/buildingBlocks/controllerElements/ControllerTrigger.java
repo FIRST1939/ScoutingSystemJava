@@ -70,11 +70,11 @@ public class ControllerTrigger implements ActionListener {
 		}
 	}
 	
-	public boolean isPressed() {
+	protected boolean isPressed() {
 		return isPressed;
 	}
 	
-	public boolean isHeld() {
+	protected boolean isHeld() {
 		return isHeld;
 	}
 }

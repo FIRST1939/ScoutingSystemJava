@@ -2,21 +2,13 @@ package buildingBlocks.controllerElements;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import buildingBlocks.RobotPanel;
 import net.java.games.input.Component;
-import net.java.games.input.Controller;
+import net.java.games.input.Component.Identifier;
 /**
  * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type Controller.Type} Gamepad.
  * @author Grayson Spidle
  */
 public class GamepadController extends JController {
-	
-	public static final int ANALOG_ERROR = -1;
-	public static final int ANALOG_NEUTRAL = 0;
-	public static final int ANALOG_UP = 1;
-	public static final int ANALOG_DOWN = 2;
-	public static final int ANALOG_LEFT = 3;
-	public static final int ANALOG_RIGHT = 4;
 	
 	public ControllerButton a = new ControllerButton();
 	public ControllerButton b = new ControllerButton();
@@ -106,6 +98,7 @@ public class GamepadController extends JController {
 				setStickAnalogValues.run();
 				
 			} 
+			
 			else {
 				if (components[i].getPollData() == 1.0f) value = true;
 					else value = false;
@@ -122,14 +115,12 @@ public class GamepadController extends JController {
 			if (name.equalsIgnoreCase("Button 8")) ls.actionPerformed(queueControls);
 			if (name.equalsIgnoreCase("Button 9")) rs.actionPerformed(queueControls);
 			
+			controller.getComponent(Identifier.Axis.POV).getPollData();
+			
 		}
-
-		try {
-			if (listener != null) listener.actionPerformed(queueControls);
-			Thread.sleep(20);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		
+		if (listener != null) listener.actionPerformed(queueControls);
+		
 	}
 	
 	public boolean isAPressed() {
@@ -195,6 +186,64 @@ public class GamepadController extends JController {
 	@Override
 	public boolean isBackPressed() {
 		return back.isPressed();
+	}
+
+	@Override
+	public boolean isAHeld() {
+		return a.isHeld();
+	}
+
+	@Override
+	public boolean isBHeld() {
+		return b.isHeld();
+	}
+
+	@Override
+	public boolean isXHeld() {
+		return x.isHeld();
+	}
+
+	@Override
+	public boolean isYHeld() {
+		return y.isHeld();
+	}
+
+	@Override
+	public boolean isLBHeld() {
+		return lb.isHeld();
+	}
+
+	@Override
+	public boolean isRBHeld() {
+		return rb.isHeld();
+	}
+
+	@Override
+	public boolean isLSHeld() {
+		return ls.isHeld();
+	}
+
+	@Override
+	public boolean isRSHeld() {
+		return rs.isHeld();
+	}
+
+	@Override
+	public boolean isStartHeld() {
+		return start.isHeld();
+	}
+
+	@Override
+	public boolean isBackHeld() {
+		return back.isHeld();
+	}
+	
+	/**
+	 * Sets the controller's input listener.
+	 * @param arg0 The specified ActionListener for the controller to output its controls.
+	 */
+	public void setActionListener(ActionListener arg0) {
+		listener = arg0;
 	}
 	
 }
