@@ -51,6 +51,7 @@ public class names extends JFrame {
 			public void keyReleased(KeyEvent arg0) {
 				if (arg0.getKeyCode() == KeyEvent.VK_ENTER){
 					TeamImport.name = txtNewEvent.getText();
+					System.out.println("New Name is: " + TeamImport.name);
 				}
 			}
 		});
