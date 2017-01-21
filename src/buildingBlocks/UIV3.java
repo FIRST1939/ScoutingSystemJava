@@ -65,7 +65,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	
 	
 	private boolean editability = false;
-	private final JMenuItem mntmTeamGetterThing = new JMenuItem("TEAM GETTER THING");
+	private final JMenuItem TEAM_GETTER = new JMenuItem("TEAM GETTER THING");
 
 	/**
 	 * Create the frame. Is not initially set to be visible
@@ -81,10 +81,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		ITEM_TO_CSV.setActionCommand("convert to csv");
 		ITEM_TO_CSV.addActionListener(this);
 		ITEM_TO_CSV.setName("itemToCSV");
-		
-		ITEM_TEAM_GET.setActionCommand("get Teams");
-		ITEM_TEAM_GET.addActionListener(this);
-		ITEM_TEAM_GET.setName("getTeams");
 
 		ITEM_IMPORT_TEAM_NUMBERS.setActionCommand("update team numbers");
 		ITEM_IMPORT_TEAM_NUMBERS.addActionListener(this);
@@ -104,16 +100,15 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		MENU_BAR.add(MENU_EXPORT);
 
 		MENU_COMPETITION.setText("Competition");
-		mntmTeamGetterThing.addMouseListener(new MouseAdapter() {
+		TEAM_GETTER.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				TI.setVisible(true);
 			}
 		});
 		
-		MENU_COMPETITION.add(mntmTeamGetterThing);
+		MENU_COMPETITION.add(TEAM_GETTER);
 		MENU_COMPETITION.add(ITEM_IMPORT_TEAM_NUMBERS);
-		MENU_COMPETITION.add(ITEM_TEAM_GET);
 		MENU_COMPETITION.setName("menuCompetition");
 		MENU_BAR.add(MENU_COMPETITION);
 		
@@ -245,10 +240,9 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	/**
 	 * Gets the save locations for the Autonomous and Teleoperated csv's by displaying its respective JFileChooser.
 	 */
-	public void setNewFile(ArrayList<String> AL, int matchCount){
+	public void setNewFile(ArrayList<String> AL){
 		File f = getEvent();
 		AL = makeArrayList(f);
-		matchCount = 0;
 	}
 	private final void getSaveLocation() {
 		// Autonomous Save File
@@ -300,6 +294,12 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 			return null;
 		}
 	}
+	/**
+	 * reads in the team numbers and puts them in a ArrayList
+	 * @author PaulC
+	 * @param file the File with the Team numbers
+	 * @return ArrayList with team numbers
+	 */
 	public ArrayList<String> makeArrayList(File file){
 		ArrayList<String> out = new ArrayList<String>();
 		try {
@@ -321,6 +321,29 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	public final void add(RobotTabbedPanel panel) {
 		panels.add(panel);
 		contentPane.add(panel);
+	}
+
+	public ArrayList<ArrayList<String>> makeFullArray(int matchCount) {
+		ArrayList<ArrayList<String>> output = new ArrayList<ArrayList<String>>();
+		ArrayList<String> OuterArray = new ArrayList<String>();
+		File file = getEvent();
+		OuterArray = makeArrayList(file);
+		for (int i = 0;i<OuterArray.size(); i++){
+			String nums = OuterArray.get(i);
+			String[] numsArray = nums.split(".");
+			ArrayList<String> innerArray = new ArrayList<String>();
+			for (int j =0; j<numsArray.length; j++){
+				innerArray.add(numsArray[i]);
+			}
+			output.add(innerArray);
+		}
+		
+		return output;
+	}
+
+	public void setMatchReset(int matchCount) {
+		// TODO Auto-generated method stub
+		matchCount = 0;
 	}
 
 }

@@ -36,7 +36,7 @@ import javax.swing.border.EmptyBorder;
 import com.google.gson.stream.JsonReader;
 import javax.swing.JScrollBar;
 
-public class TeamImport extends JFrame {
+public class TI extends JFrame {
 
 	static String matchKey = "";
 	static Object result;
@@ -49,11 +49,11 @@ public class TeamImport extends JFrame {
 	ArrayList<String> output = new ArrayList<String>();
 	public static String name = "";
 	private names N = new names();
-//	public PrintStream out;
-//	public PrintStream err;
-//	public JTextArea area;
-//	public JScrollPane scroll;
-//	private JScrollPane scrollPane;
+	public PrintStream out;
+	public PrintStream err;
+	public JTextArea area;
+	public JScrollPane scroll;
+	private JScrollPane scrollPane;
 	
 	
 	
@@ -62,12 +62,12 @@ public class TeamImport extends JFrame {
 	 * Launch the application.
 	 */
 	private final File getEvent() {
-//		area = new JTextArea();
-//		area.setEditable(false);
-//		
-//		
-//		scroll = new JScrollPane();
-//		scroll.setViewportView(area);
+		area = new JTextArea();
+		area.setEditable(false);
+		
+		
+		scroll = new JScrollPane();
+		scroll.setViewportView(area);
 		
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -85,7 +85,7 @@ public class TeamImport extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TeamImport frame = new TeamImport();
+					TI frame = new TI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -97,30 +97,30 @@ public class TeamImport extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TeamImport() {
-//		out = new PrintStream(new OutputStream() {
-//
-//			@Override
-//			public void write(int b) throws IOException {
-//				char c = (char) b;
-//				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
-//			}
-//			
-//		});
-//		
-//		err = new PrintStream(new OutputStream() {
-//
-//			@Override
-//			public void write(int b) throws IOException {
-//				char c = (char) b;
-//				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
-//			}
-//			
-//		});
-//		System.setOut(out);
-//		System.setErr(err);
+	public TI() {
+		out = new PrintStream(new OutputStream() {
+
+			@Override
+			public void write(int b) throws IOException {
+				char c = (char) b;
+				TI.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
+			}
+			
+		});
+		
+		err = new PrintStream(new OutputStream() {
+
+			@Override
+			public void write(int b) throws IOException {
+				char c = (char) b;
+				TI.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
+			}
+			
+		});
+		System.setOut(out);
+		System.setErr(err);
 		setForeground(Color.WHITE);
-		setTitle("Import");
+		setTitle("MEMER");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -128,8 +128,8 @@ public class TeamImport extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-//		area = new JTextArea();
-//		area.setEditable(false);
+		area = new JTextArea();
+		
 		
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
@@ -167,23 +167,23 @@ public class TeamImport extends JFrame {
 		btnSave.setBounds(355, 8, 69, 23);
 		contentPane.add(btnSave);
 		
-//		scrollPane = new JScrollPane();
-//		scrollPane.setBounds(10, 42, 414, 209);
-//		contentPane.add(scrollPane);
-//		scrollPane.setViewportView(area);
-//		
-//		
-//		
-//		
-//	}
-//	public void actionPerformed(ActionEvent e) {
-//		if (e.getActionCommand().equals("write")) {
-//			char c = (char) e.getSource();
-//			area.setText(area.getText() + c);
-//		}
-//		else if (e.getActionCommand().equals("clear")) {
-//			area.setText("");
-//		}
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 42, 414, 209);
+		contentPane.add(scrollPane);
+		scrollPane.setViewportView(area);
+		
+		
+		
+		
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("write")) {
+			char c = (char) e.getSource();
+			area.setText(area.getText() + c);
+		}
+		else if (e.getActionCommand().equals("clear")) {
+			area.setText("");
+		}
 	}
 	private String listToString(){
 		String out = "";
