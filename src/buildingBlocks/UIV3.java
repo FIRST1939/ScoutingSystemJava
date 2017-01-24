@@ -60,7 +60,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	public File teleoperatedSaveFile = null;
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 
-	public final ConsoleWindow CONSOLE = new ConsoleWindow();
+//	public final ConsoleWindow CONSOLE = new ConsoleWindow();
 	public final TeamImport TI = new TeamImport();
 	
 	
@@ -137,7 +137,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		} 
 		
 		else if (event.getActionCommand().equals("show system log")) { // Shows the ConsoleWindow 
-			CONSOLE.setVisible(true);
+//			CONSOLE.setVisible(true);
 		}
 		else if (event.getActionCommand().equals("toggle editability")) {
 			editability = !editability;

@@ -43,9 +43,9 @@ public class Main {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				closeRequested = true;
-				ui.CONSOLE.out.close();
-				ui.CONSOLE.err.close();
+//				closeRequested = true;
+//				ui.CONSOLE.out.close();
+//				ui.CONSOLE.err.close();
 			}
 
 			@Override
