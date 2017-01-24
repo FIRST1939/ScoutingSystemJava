@@ -11,31 +11,15 @@ import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class names extends JFrame {
+public class Names extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtNewEvent;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					names frame = new names();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public names() {
+	public Names() {
 		setTitle("Name?");
 		setType(Type.POPUP);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

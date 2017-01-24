@@ -20,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -48,7 +50,7 @@ public class TeamImport extends JFrame {
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 	ArrayList<String> output = new ArrayList<String>();
 	public static String name = "";
-	private names N = new names();
+	private Names N = new Names();
 //	public PrintStream out;
 //	public PrintStream err;
 //	public JTextArea area;
@@ -151,6 +153,7 @@ public class TeamImport extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
+				N = new Names();
 				N.setVisible(true);
 			}
 		});
@@ -185,15 +188,6 @@ public class TeamImport extends JFrame {
 //			area.setText("");
 //		}
 	}
-	private String listToString(){
-		String out = "";
-		for (int i = 0; i<output.size(); i++){
-			out = out + output.get(i);
-		}
-		return out;
-		
-	}
-	
 	private void addMatch(){
 		List<String> the = new ArrayList<String>();
 		try {
@@ -214,7 +208,6 @@ public class TeamImport extends JFrame {
 			output.add(adding);
 			System.out.println(output.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -227,20 +220,21 @@ public class TeamImport extends JFrame {
 		
 		System.out.println("File at: " + file.getAbsolutePath());
 		try {
-			PrintWriter PW = new PrintWriter(file);
 			String outpp = output.toString();
-			outpp.replaceAll("},", "} \n");
-			PW.write(outpp);
-			PW.flush();
-			PW.close();
+			StringBuilder b = new StringBuilder();
+			for (String s : output) {
+				b.append(s + "\n");
+			}
+			outpp = b.toString();
+			Files.write(file.toPath(), outpp.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}	
