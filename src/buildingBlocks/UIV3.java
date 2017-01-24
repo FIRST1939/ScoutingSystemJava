@@ -305,6 +305,12 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		try {
 			out = (ArrayList<String>) FileUtils.read(file);
 			
+			
+			
+			
+			
+			
+			
 			System.out.println(out.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -322,21 +328,24 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		panels.add(panel);
 		contentPane.add(panel);
 	}
-
-	public ArrayList<ArrayList<String>> makeFullArray(int matchCount) {
+	
+	public ArrayList<ArrayList<String>> makeFullArray() {
 		ArrayList<ArrayList<String>> output = new ArrayList<ArrayList<String>>();
 		ArrayList<String> OuterArray = new ArrayList<String>();
 		File file = getEvent();
 		OuterArray = makeArrayList(file);
 		for (int i = 0;i<OuterArray.size(); i++){
 			String nums = OuterArray.get(i);
-			String[] numsArray = nums.split(".");
-			ArrayList<String> innerArray = new ArrayList<String>();
-			for (int j =0; j<numsArray.length; j++){
-				innerArray.add(numsArray[i]);
+			String[] numsArray = new String[6];
+			numsArray = nums.split(".");
+			StringTokenizer ST  = new StringTokenizer(nums, ".");
+			ArrayList<String> innerArray = new ArrayList<String>();			
+			while (ST.hasMoreTokens()){
+				innerArray.add(ST.nextToken());
 			}
 			output.add(innerArray);
 		}
+		System.out.println("ArrayList of ArrayList: " + output.toString());
 		
 		return output;
 	}
