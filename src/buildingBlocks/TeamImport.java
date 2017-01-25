@@ -38,6 +38,13 @@ import javax.swing.border.EmptyBorder;
 import com.google.gson.stream.JsonReader;
 import javax.swing.JScrollBar;
 
+/**
+ * Dear programmer that is attempting to read this. Good luck! I hope you figure it out because I (Grayson Spidle) sure couldn't
+ * The only reason you should be editing this file is because something is broken. Other than that,
+ * don't touch anything! <3
+ * @author Paul Case
+ *
+ */
 public class TeamImport extends JFrame {
 
 	static String matchKey = "";
@@ -60,9 +67,6 @@ public class TeamImport extends JFrame {
 	
 	
 
-	/**
-	 * Launch the application.
-	 */
 	private final File getEvent() {
 //		area = new JTextArea();
 //		area.setEditable(false);
@@ -188,6 +192,7 @@ public class TeamImport extends JFrame {
 //			area.setText("");
 //		}
 	}
+	
 	private void addMatch(){
 		List<String> the = new ArrayList<String>();
 		try {
@@ -221,15 +226,12 @@ public class TeamImport extends JFrame {
 		System.out.println("File at: " + file.getAbsolutePath());
 		try {
 			String outpp = output.toString();
-			StringBuilder b = new StringBuilder();
-			for (String s : output) {
-				b.append(s + "\n");
-			}
-			outpp = b.toString();
+			outpp.replaceAll(",", "\n");
 			Files.write(file.toPath(), outpp.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -275,7 +277,6 @@ public class TeamImport extends JFrame {
 		
 		return output;
 	}
-	
 	private static List<String> readAlliances(JsonReader reader) throws IOException {
 		List<String> output = new Vector<String>();
 		reader.beginObject();
@@ -294,8 +295,6 @@ public class TeamImport extends JFrame {
 		reader.endObject();
 		return output;
 	}	
-	
-	
 	private static List<String> readAlliance(JsonReader reader) throws IOException {
 		List<String> output = new Vector<String>();
 		reader.beginObject();
@@ -311,7 +310,6 @@ public class TeamImport extends JFrame {
 		reader.endObject();
 		return output;
 	}
-
 	private static List<String> readTeams(JsonReader reader) throws IOException {
 		Vector<String> output = new Vector<String>();
 		reader.beginArray();
