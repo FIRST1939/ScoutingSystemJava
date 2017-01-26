@@ -216,10 +216,14 @@ public class TeamImport extends JFrame {
 	
 	private final void write(JButton ep){
 		
-		File file = new File(name + ".txt");
+		File file = new File(this.defaultSaveFile+"\\"+name + ".txt");
 		
 		System.out.println("File at: " + file.getAbsolutePath());
+		
 		try {
+			if(!file.exists()){
+				file.createNewFile();
+			}
 			String outpp = output.toString();
 			StringBuilder b = new StringBuilder();
 			for (String s : output) {
@@ -232,11 +236,8 @@ public class TeamImport extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		
 	}	
 	
 	private static JsonReader createMatchJsonReader(String matchId) throws IOException {
