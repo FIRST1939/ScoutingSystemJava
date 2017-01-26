@@ -2,43 +2,35 @@ package buildingBlocks.controllerElements;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import buildingBlocks.RobotPanel;
 import net.java.games.input.Component;
-import net.java.games.input.Controller;
+import net.java.games.input.Component.Identifier;
 /**
- * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type Controller.Type} Stick.
+ * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type.Stick Controller.Type.Stick}.
  * @author Grayson Spidle
  */
 public class StickController extends JController {
 
-	public static final int ANALOG_ERROR = -1;
-	public static final int ANALOG_NEUTRAL = 0;
-	public static final int ANALOG_UP = 1;
-	public static final int ANALOG_DOWN = 2;
-	public static final int ANALOG_LEFT = 3;
-	public static final int ANALOG_RIGHT = 4;
+	protected ControllerButton a = new ControllerButton();
+	protected ControllerButton b = new ControllerButton();
+	protected ControllerButton x = new ControllerButton();
+	protected ControllerButton y = new ControllerButton();
+	protected ControllerButton lb = new ControllerButton();
+	protected ControllerButton rb = new ControllerButton();
+	protected ControllerButton start = new ControllerButton();
+	protected ControllerButton back = new ControllerButton();
+	protected ControllerButton ls = new ControllerButton();
+	protected ControllerButton rs = new ControllerButton();
 
-	public ControllerButton a = new ControllerButton();
-	public ControllerButton b = new ControllerButton();
-	public ControllerButton x = new ControllerButton();
-	public ControllerButton y = new ControllerButton();
-	public ControllerButton lb = new ControllerButton();
-	public ControllerButton rb = new ControllerButton();
-	public ControllerButton start = new ControllerButton();
-	public ControllerButton back = new ControllerButton();
-	public ControllerButton ls = new ControllerButton();
-	public ControllerButton rs = new ControllerButton();
-
-	public ControllerButton lt = new ControllerButton();
-	public ControllerButton rt = new ControllerButton();
-
-	private static int leftStick = ANALOG_NEUTRAL;
-	private static int rightStick = ANALOG_NEUTRAL;
+	protected ControllerButton lt = new ControllerButton();
+	protected ControllerButton rt = new ControllerButton();
+	
+	protected static int leftStick = ANALOG_NEUTRAL;
+	protected static int rightStick = ANALOG_NEUTRAL;
 
 	private ActionListener listener;
 	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
 
-	boolean value = false;
+	public boolean value = false;
 	public float analogValue = 0.0f;
 	
 	/**
@@ -59,9 +51,9 @@ public class StickController extends JController {
 		controller.poll();
 		Component[] components = controller.getComponents();
 		for (int i = 0; i < components.length; i++) {
-
 			boolean isAnalog = components[i].isAnalog();
 			String name = components[i].getName();
+			Identifier id = components[i].getIdentifier();
 
 			if (isAnalog) {
 				analogValue = components[i].getPollData();
@@ -93,9 +85,8 @@ public class StickController extends JController {
 						}
 					}
 				};
-
-				setStickAnalogValues.run();
 				
+				setStickAnalogValues.run();
 			} else {
 				if (components[i].getPollData() == 1.0f)
 					value = true;
@@ -104,7 +95,6 @@ public class StickController extends JController {
 			}
 
 			Runnable setButtonValues = new Runnable() {
-
 				@Override
 				public void run() {
 					if (name.equalsIgnoreCase("Button 0")) x.actionPerformed(queueControls);
@@ -125,12 +115,7 @@ public class StickController extends JController {
 			setButtonValues.run();
 		}
 		
-		try {
-			if (listener != null) listener.actionPerformed(queueControls);
-			Thread.sleep(20);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (listener != null) listener.actionPerformed(queueControls);
 	}
 
 	/**
@@ -260,7 +245,57 @@ public class StickController extends JController {
 	public int getRightStick() {
 		return rightStick;
 	}
+	
+	@Override
+	public boolean isAHeld() {
+		return a.isHeld();
+	}
 
+	@Override
+	public boolean isBHeld() {
+		return b.isHeld();
+	}
+
+	@Override
+	public boolean isXHeld() {
+		return x.isHeld();
+	}
+
+	@Override
+	public boolean isYHeld() {
+		return y.isHeld();
+	}
+
+	@Override
+	public boolean isLBHeld() {
+		return lb.isHeld();
+	}
+
+	@Override
+	public boolean isRBHeld() {
+		return rb.isHeld();
+	}
+
+	@Override
+	public boolean isLSHeld() {
+		return ls.isHeld();
+	}
+
+	@Override
+	public boolean isRSHeld() {
+		return rs.isHeld();
+	}
+
+	@Override
+	public boolean isStartHeld() {
+		return start.isHeld();
+	}
+
+	@Override
+	public boolean isBackHeld() {
+		return back.isHeld();
+	}
+	
 	/**
 	 * Sets the controller's input listener.
 	 * @param arg0 The specified ActionListener for the controller to output its controls.

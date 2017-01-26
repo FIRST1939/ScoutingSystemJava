@@ -30,46 +30,94 @@ public abstract class JController {
 	public abstract boolean isAPressed();
 	
 	/**
+	 * Returns if a was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isAHeld();
+	
+	/**
 	 * Returns if b was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isBPressed();
+	
+	/**
+	 * Returns if b was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isBHeld();
 
 	/**
 	 * Returns if x was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isXPressed();
+	
+	/**
+	 * Returns if x was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isXHeld();
 
 	/**
 	 * Returns if y was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isYPressed();
+	
+	/**
+	 * Returns if y was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isYHeld();
 
 	/**
 	 * Returns if lb was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isLBPressed();
+	
+	/**
+	 * Returns if lb was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isLBHeld();
 
 	/**
 	 * Returns if rb was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isRBPressed();
+	
+	/**
+	 * Returns if rb was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isRBHeld();
 
 	/**
 	 * Returns if the left stick was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isLSPressed();
+	
+	/**
+	 * Returns if left stick was held.
+	 * @return Returns true if the stick was held and returns false if it was not held.
+	 */
+	public abstract boolean isLSHeld();
 
 	/**
 	 * Returns if right stick was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isRSPressed();
+	
+	/**
+	 * Returns if right stick was held.
+	 * @return Returns true if the stick was held and returns false if it was not held.
+	 */
+	public abstract boolean isRSHeld();
 
 	/**
 	 * Returns if lt was pressed.
@@ -93,7 +141,7 @@ public abstract class JController {
 	
 	/**
 	 * Returns if rt is held down.
-	 * @return Returns true if the button is held down returns false if it is not held down.
+	 * @return Returns true if the button is held and returns false if it was not held.
 	 */
 	public abstract boolean isRTHeld();
 
@@ -104,10 +152,22 @@ public abstract class JController {
 	public abstract boolean isStartPressed();
 	
 	/**
+	 * Returns if start was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isStartHeld();
+	
+	/**
 	 * Returns if back was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isBackPressed();
+	
+	/**
+	 * Returns if back was held.
+	 * @return Returns true if the button was held and returns false if it was not held.
+	 */
+	public abstract boolean isBackHeld();
 	
 	/**
 	 * Returns the left stick's direction.

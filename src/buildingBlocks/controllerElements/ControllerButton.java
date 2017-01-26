@@ -25,7 +25,7 @@ public class ControllerButton implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		try {
+		if (e.getSource().getClass().isAssignableFrom(GamepadController.class)) {
 			GamepadController source = (GamepadController) e.getSource();
 			current = source.value;
 			
@@ -44,7 +44,8 @@ public class ControllerButton implements ActionListener {
 				isHeld = false;
 				previous = current;
 			}
-		} catch (ClassCastException e1) {
+		}
+		else if (e.getSource().getClass().isAssignableFrom(StickController.class)) {
 			StickController source = (StickController) e.getSource();
 			current = source.value;
 			
@@ -64,13 +65,16 @@ public class ControllerButton implements ActionListener {
 				previous = current;
 			}
 		}
+		else {
+			System.err.println("Invalid controller type. Failed to update controller button state.");
+		}
 	}
 	
-	public boolean isPressed() {
+	protected boolean isPressed() {
 		return isPressed;
 	}
 	
-	public boolean isHeld() {
+	protected boolean isHeld() {
 		return isHeld;
 	}
 }
