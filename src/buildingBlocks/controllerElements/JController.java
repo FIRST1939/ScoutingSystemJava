@@ -131,6 +131,8 @@ public abstract class JController {
 	 */
 	public abstract boolean isLTHeld();
 	
+	public abstract boolean isLSHeld();
+	
 	/**
 	 * Returns if rt was pressed.
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.

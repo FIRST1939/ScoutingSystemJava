@@ -189,6 +189,7 @@ public class GamepadController extends JController {
 	}
 
 	@Override
+
 	public boolean isAHeld() {
 		return a.isHeld();
 	}
@@ -245,6 +246,7 @@ public class GamepadController extends JController {
 	public void setActionListener(ActionListener arg0) {
 		listener = arg0;
 	}
+
 	
 }
 	

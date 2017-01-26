@@ -1,5 +1,6 @@
 package buildingBlocks;
 
+
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +8,7 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -23,13 +25,15 @@ import javax.swing.JToggleButton;
 import tools.ExportData;
 import tools.FileUtils;
 import tools.ImageUtils;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * The UI class where the main UI can be found. Is a subclass to JFrame and is an ActionListener.
  * @author Grayson Spidle
  *
  */
-public abstract class UIV3 extends JFrame implements ActionListener, ContainerListener {
+public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 
 	private static final long serialVersionUID = 8974473527856329569L;
 	
@@ -45,6 +49,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 
 	protected final JMenuItem ITEM_IMPORT_TEAM_NUMBERS = new JMenuItem("Import Team Numbers");
 	protected final JMenuItem ITEM_TO_CSV = new JMenuItem("to .csv");
+	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Next");
 	protected final JMenuItem ITEM_SHOW_CONSOLE = new JMenuItem("Show Console");
 	
 	public JPanel contentPane = new JPanel();
@@ -54,13 +59,17 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	public File teleoperatedSaveFile = null;
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 
-	public final ConsoleWindow CONSOLE = new ConsoleWindow();
+//	public final ConsoleWindow CONSOLE = new ConsoleWindow();
+	public final TeamImport TI = new TeamImport();
+	
 	
 	private boolean editability = false;
+	private final JMenuItem TEAM_GETTER = new JMenuItem("TEAM GETTER THING");
 
 	/**
 	 * Create the frame. Is not initially set to be visible
 	 */
+	
 	public UIV3() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +84,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 		ITEM_IMPORT_TEAM_NUMBERS.setActionCommand("update team numbers");
 		ITEM_IMPORT_TEAM_NUMBERS.addActionListener(this);
 		ITEM_IMPORT_TEAM_NUMBERS.setName("itemImportTeamNumbers");
-		
+						
 		ITEM_SHOW_CONSOLE.setActionCommand("show system log");
 		ITEM_SHOW_CONSOLE.addActionListener(this);
 		ITEM_SHOW_CONSOLE.setName("itemShowConsole");
@@ -90,6 +99,14 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 		MENU_BAR.add(MENU_EXPORT);
 
 		MENU_COMPETITION.setText("Competition");
+		TEAM_GETTER.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				TI.setVisible(true);
+			}
+		});
+		
+		MENU_COMPETITION.add(TEAM_GETTER);
 		MENU_COMPETITION.add(ITEM_IMPORT_TEAM_NUMBERS);
 		MENU_COMPETITION.setName("menuCompetition");
 		MENU_BAR.add(MENU_COMPETITION);
@@ -112,40 +129,14 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	// This is where the action listeners are managed for this class (not for the controller inputs)
 	@Override
 	public void actionPerformed(ActionEvent event) { 
+		
 		if (event.getActionCommand().equals("convert to csv")) {// CSV conversion
 			getSaveLocation();
 			ExportData.toCSV(this);
 		} 
-		else if (event.getActionCommand().equals("update team numbers")) { // Updates team numbers from a comma separated value list in a txt file
-			try {
-				File file = getEvent();
-				List<String> lines = FileUtils.read(file);
-				if (lines.size() == 1) {
-					String str = lines.toString();
-					str = str.replace("[", "");
-					str = str.replace("]", "");
-					
-					StringTokenizer tokenizer = new StringTokenizer(str, ",");
-					Vector<String> teamNames = new Vector<String>();
-					while (tokenizer.hasMoreTokens()) {
-						teamNames.add(tokenizer.nextToken());
-					}
-					
-					for (String s : teamNames) System.out.println(s);
-					
-//					Sets all team names in the panels with their respective name
-					for (int i = 0; i < teamNames.size(); i++) {
-						panels.get(i).autonomous.number.setText(teamNames.get(i));
-						panels.get(i).teleoperated.number.setText(teamNames.get(i));
-					}
-
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} 
+		
 		else if (event.getActionCommand().equals("show system log")) { // Shows the ConsoleWindow 
-			CONSOLE.setVisible(true);
+//			CONSOLE.setVisible(true);
 		}
 		else if (event.getActionCommand().equals("toggle editability")) {
 			editability = !editability;
@@ -248,6 +239,13 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	/**
 	 * Gets the save locations for the Autonomous and Teleoperated csv's by displaying its respective JFileChooser.
 	 */
+	public void setNewFile(ArrayList<String> AL){
+		File f = getEvent();
+		AL = makeArrayList(f);
+	}
+	/**
+	 * Finds
+	 */
 	private final void getSaveLocation() {
 		// Autonomous Save File
 		JFileChooser chooser = new JFileChooser();
@@ -285,7 +283,7 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	 * Gets a text document which has a comma separated list of the team numbers that will be playing.
 	 * @return Returns the file that points to the text document.
 	 */
-	private final File getEvent() {
+	public File getEvent() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -298,6 +296,31 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 			return null;
 		}
 	}
+	/**
+	 * reads in the team numbers and puts them in a ArrayList
+	 * @author PaulC
+	 * @param file the File with the Team numbers
+	 * @return ArrayList with team numbers
+	 */
+	public ArrayList<String> makeArrayList(File file){
+		ArrayList<String> out = new ArrayList<String>();
+		try {
+			out = (ArrayList<String>) FileUtils.read(file);
+			
+			
+			
+			
+			
+			
+			
+			System.out.println(out.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return out;
+		
+	}
 	
 	/**
 	 * Adds a RobotTabbedPanel to the UI.
@@ -306,6 +329,32 @@ public abstract class UIV3 extends JFrame implements ActionListener, ContainerLi
 	public final void add(RobotTabbedPanel panel) {
 		panels.add(panel);
 		contentPane.add(panel);
+	}
+	
+	public ArrayList<ArrayList<String>> makeFullArray() {
+		ArrayList<ArrayList<String>> output = new ArrayList<ArrayList<String>>();
+		ArrayList<String> OuterArray = new ArrayList<String>();
+		File file = getEvent();
+		OuterArray = makeArrayList(file);
+		for (int i = 0;i<OuterArray.size(); i++){
+			String nums = OuterArray.get(i);
+			String[] numsArray = new String[6];
+			numsArray = nums.split(".");
+			StringTokenizer ST  = new StringTokenizer(nums, ".");
+			ArrayList<String> innerArray = new ArrayList<String>();			
+			while (ST.hasMoreTokens()){
+				innerArray.add(ST.nextToken());
+			}
+			output.add(innerArray);
+		}
+		System.out.println("ArrayList of ArrayList: " + output.toString());
+		
+		return output;
+	}
+
+	public void setMatchReset(int matchCount) {
+		// TODO Auto-generated method stub
+		matchCount = 0;
 	}
 
 }
