@@ -246,7 +246,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	/**
 	 * Finds
 	 */
-	private final void getSaveLocation() {
+	public final void getSaveLocation() {
 		// Autonomous Save File
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
