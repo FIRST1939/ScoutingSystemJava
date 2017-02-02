@@ -48,7 +48,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	protected final JMenu MENU_DEBUG = new JMenu("Debug");
 
 	protected final JMenuItem ITEM_IMPORT_TEAM_NUMBERS = new JMenuItem("Import Team Numbers");
-	protected final JMenuItem ITEM_TO_CSV = new JMenuItem("to .csv");
 	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Next");
 	protected final JMenuItem ITEM_SHOW_CONSOLE = new JMenuItem("Show Console");
 	
@@ -76,10 +75,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		
 		MENU_BAR.setName("menuBar");
 		setJMenuBar(MENU_BAR);
-		
-		ITEM_TO_CSV.setActionCommand("convert to csv");
-		ITEM_TO_CSV.addActionListener(this);
-		ITEM_TO_CSV.setName("itemToCSV");
 
 		ITEM_IMPORT_TEAM_NUMBERS.setActionCommand("update team numbers");
 		ITEM_IMPORT_TEAM_NUMBERS.addActionListener(this);
@@ -95,7 +90,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		
 		MENU_EXPORT.setText("Export");
 		MENU_EXPORT.setName("menuExport");
-		MENU_EXPORT.add(ITEM_TO_CSV);
 		MENU_BAR.add(MENU_EXPORT);
 
 		MENU_COMPETITION.setText("Competition");
@@ -133,10 +127,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		if (event.getActionCommand().equals("convert to csv")) {// CSV conversion
 			getSaveLocation();
 			ExportData.toCSV(this);
-		} 
-		
-		else if (event.getActionCommand().equals("show system log")) { // Shows the ConsoleWindow 
-//			CONSOLE.setVisible(true);
 		}
 		else if (event.getActionCommand().equals("toggle editability")) {
 			editability = !editability;
@@ -244,7 +234,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		AL = makeArrayList(f);
 	}
 	/**
-	 * Finds
+	 * Finds the save file for autosavefile and telesavefile
 	 */
 	public final void getSaveLocation() {
 		// Autonomous Save File
