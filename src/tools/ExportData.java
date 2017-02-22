@@ -2,14 +2,10 @@ package tools;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JLabel;
-
 import buildingBlocks.RobotTabbedPanel;
-import buildingBlocks.ScoreField;
 import buildingBlocks.ScoreLabel;
 import buildingBlocks.UIV3;
 
