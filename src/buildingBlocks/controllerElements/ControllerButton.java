@@ -26,26 +26,21 @@ public class ControllerButton implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().getClass().isAssignableFrom(JController.class)) {
-			current = Boolean.parseBoolean(e.getActionCommand());
-			if (previous && !current) {
-				isPressed = true;
-				isHeld = false;
-				previous = current;
-			}
-			else if (previous && current) {
-				isPressed = false;
-				isHeld = true;
-				previous = current;
-			}
-			else {
-				isPressed = false;
-				isHeld = false;
-				previous = current;
-			}
+		current = Boolean.parseBoolean(e.getActionCommand());
+		if (previous && !current) {
+			isPressed = true;
+			isHeld = false;
+			previous = current;
+		}
+		else if (previous && current) {
+			isPressed = false;
+			isHeld = true;
+			previous = current;
 		}
 		else {
-			System.err.println("Failed to update controller button state. Invalid source type");
+			isPressed = false;
+			isHeld = false;
+			previous = current;
 		}
 	}
 	
