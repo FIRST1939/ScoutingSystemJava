@@ -1,4 +1,5 @@
 package buildingBlocks.controllerElements;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,6 +10,7 @@ import net.java.games.input.Component.Identifier.Button;
 import net.java.games.input.Controller;
 /**
  * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type.Stick Controller.Type.Stick}.
+ * 
  * @author Grayson Spidle
  */
 public class StickController extends JController {
@@ -26,17 +28,21 @@ public class StickController extends JController {
 
 	protected ControllerButton lt = new ControllerButton();
 	protected ControllerButton rt = new ControllerButton();
-	
+
 	protected static int leftStick = ANALOG_NEUTRAL;
 	protected static int rightStick = ANALOG_NEUTRAL;
 	protected static float dPad = SWITCH_NEUTRAL;
 
 	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
-
+	public boolean value = false;
+	public float analogValue = 0.0f;
 	/**
 	 * The constructor.
-	 * @param arg0 The controller from which the inputs will be parsed.
-	 * @param controlsWhichRobotPanel The designated robotPanel on the UI that this controller will control.
+	 * 
+	 * @param arg0
+	 *            The controller from which the inputs will be parsed.
+	 * @param controlsWhichRobotPanel
+	 *            The designated robotPanel on the UI that this controller will control.
 	 */
 	public StickController(net.java.games.input.Controller arg0, int controlsWhichRobotPanel) {
 		super(arg0, controlsWhichRobotPanel);
@@ -45,6 +51,7 @@ public class StickController extends JController {
 	/**
 	 * Call this method to get controller input (does not contain a loop)
 	 */
+	@Override
 	public void pollControllerInput() {
 		if (!controller.poll()) {
 			return;
@@ -82,7 +89,9 @@ public class StickController extends JController {
 				} 
 			} else {
 				boolean value = false;
-				if (components[i].getPollData() == 1.0f) value = true;
+				if (components[i].getPollData() == 1.0f) {
+          value = true;
+        }
 				if (id.equals(Button._0)) {
 					x.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
 				} else if (id.equals(Button._1)) {
@@ -108,79 +117,84 @@ public class StickController extends JController {
 				} else if (id.equals(Button._11)) {
 					rs.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
 				}
-			}
-		}
-		if (!listeners.isEmpty()) {
-			for (ActionListener l : listeners) {
-				l.actionPerformed(queueControls);
-			}
-		}
-	}
-
+		  }
+		  if (!listeners.isEmpty()) {
+			 for (ActionListener l : listeners) {
+				  l.actionPerformed(queueControls);
+		  }
+		 }
+   }
+    
+	@Override
 	public boolean isAPressed() {
-		return a.isPressed();
+		return this.a.isPressed();
 	}
-	
+    
+	@Override
 	public boolean isBPressed() {
-		return b.isPressed();
+		return this.b.isPressed();
 	}
 
+	@Override
 	public boolean isXPressed() {
-		return x.isPressed();
+		return this.x.isPressed();
 	}
 
+  @Override
 	public boolean isYPressed() {
-		return y.isPressed();
+		return this.y.isPressed();
 	}
 
+	@Override
 	public boolean isLBPressed() {
-		return lb.isPressed();
+		return this.lb.isPressed();
 	}
-
+	@Override
 	public boolean isRBPressed() {
-		return rb.isPressed();
+		return this.rb.isPressed();
 	}
 
+	@Override
 	public boolean isLSPressed() {
-		return ls.isPressed();
+		return this.ls.isPressed();
 	}
-
+	@Override
 	public boolean isRSPressed() {
-		return rs.isPressed();
+		return this.rs.isPressed();
 	}
 
+	@Override
 	public boolean isLTPressed() {
-		return lt.isPressed();
+		return this.lt.isPressed();
 	}
-	
+	@Override
 	public boolean isLTHeld() {
-		return lt.isHeld();
+		return this.lt.isHeld();
 	}
-	
+	@Override
 	public boolean isRTPressed() {
-		return rt.isPressed();
+		return this.rt.isPressed();
 	}
-	
+	@Override
 	public boolean isRTHeld() {
-		return rt.isHeld();
+		return this.rt.isHeld();
 	}
-
+	@Override
 	public boolean isStartPressed() {
-		return start.isPressed();
+		return this.start.isPressed();
 	}
-	
+	@Override
 	public boolean isBackPressed() {
-		return back.isPressed();
+		return this.back.isPressed();
 	}
-	
+  @Override
 	public int getLeftStick() {
 		return leftStick;
 	}
-
+	@Override
 	public int getRightStick() {
 		return rightStick;
 	}
-	
 	@Override
 	public float getDPad() {
 		// TODO try and get this to work
@@ -189,57 +203,54 @@ public class StickController extends JController {
 	
 	@Override
 	public boolean isAHeld() {
-		return a.isHeld();
+		return this.a.isHeld();
 	}
 
 	@Override
 	public boolean isBHeld() {
-		return b.isHeld();
+		return this.b.isHeld();
 	}
 
 	@Override
 	public boolean isXHeld() {
-		return x.isHeld();
+		return this.x.isHeld();
 	}
 
 	@Override
 	public boolean isYHeld() {
-		return y.isHeld();
+		return this.y.isHeld();
 	}
 
 	@Override
 	public boolean isLBHeld() {
-		return lb.isHeld();
+		return this.lb.isHeld();
 	}
 
 	@Override
 	public boolean isRBHeld() {
-		return rb.isHeld();
+		return this.rb.isHeld();
 	}
 
 	@Override
 	public boolean isLSHeld() {
-		return ls.isHeld();
+		return this.ls.isHeld();
 	}
 
 	@Override
 	public boolean isRSHeld() {
-		return rs.isHeld();
+		return this.rs.isHeld();
 	}
 
 	@Override
 	public boolean isStartHeld() {
-		return start.isHeld();
+		return this.start.isHeld();
 	}
 
 	@Override
 	public boolean isBackHeld() {
-		return back.isHeld();
+		return this.back.isHeld();
 	}
-	
 	public Controller getController() {
 		return controller;
 	}
-
-	
 }
