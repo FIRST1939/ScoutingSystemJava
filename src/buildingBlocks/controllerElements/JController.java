@@ -1,18 +1,47 @@
 package buildingBlocks.controllerElements;
 
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
+
+import net.java.games.input.Rumbler;
 
 public abstract class JController {
 
+	/**
+	 * Use this value when there is an error
+	 */
 	public static final int ANALOG_ERROR = -1;
+	/**
+	 * This value is used when an analog stick is not pointed in a particular direction.
+	 */
 	public static final int ANALOG_NEUTRAL = 0;
+	/**
+	 * This value is used when an analog stick is pointed up.
+	 */
 	public static final int ANALOG_UP = 1;
+	/**
+	 * This value is used when an analog stick is pointed down.
+	 */
 	public static final int ANALOG_DOWN = 2;
+	/**
+	 * This value is used when an analog stick is pointed left.
+	 */
 	public static final int ANALOG_LEFT = 3;
+	/**
+	 * This value is used when an analog stick is pointed right.
+	 */
 	public static final int ANALOG_RIGHT = 4;
 	
-	protected net.java.games.input.Controller controller;
-	protected ActionListener listener;
+	public static final float SWITCH_ERROR = -1f;
+	public static final float SWITCH_NEUTRAL = 0f;
+	public static final float SWITCH_UP = 0.25f;
+	public static final float SWITCH_RIGHT = 0.5f;
+	public static final float SWITCH_DOWN = 0.75f;
+	public static final float SWITCH_LEFT = 1f;
+	
+	public net.java.games.input.Controller controller;
+	protected List<ActionListener> listeners = new Vector<ActionListener>();
 	
 	public int robotPanelNumber = -1;
 	
@@ -179,8 +208,25 @@ public abstract class JController {
 	 */
 	public abstract int getRightStick();
 	
-	public void setActionListener(ActionListener listener) {
-		this.listener = listener;
+	/**
+	 * Returns the dpad's direction.
+	 * @return Returns a float reflecting the directional pad's direction.
+	 */
+	public abstract float getDPad();
+	
+	public void rumble(float intensity) {
+		for (Rumbler r : controller.getRumblers()) {
+			r.rumble(intensity);
+		}
 	}
+	
+	public void addActionListener(ActionListener listener) {
+		this.listeners.add(listener);
+	}
+	
+	public void removeActionListener(ActionListener listener) {
+		this.listeners.remove(listener);
+	}
+	
 	
 }

@@ -3,13 +3,9 @@ package buildingBlocks;
 import java.awt.Component;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Vector;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**

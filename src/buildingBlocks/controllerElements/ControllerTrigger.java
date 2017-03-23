@@ -45,9 +45,7 @@ public class ControllerTrigger implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		GamepadController source = (GamepadController) e.getSource();
-		float analogValue = source.analogValue;
-		
+		float analogValue = Float.parseFloat(e.getActionCommand());
 		if (Math.round(analogValue) == maxAnalogValue) {
 			current = true;
 		}
@@ -63,10 +61,12 @@ public class ControllerTrigger implements ActionListener {
 		else if (previous && current) {
 			isPressed = false;
 			isHeld = true;
+			previous = current;
 		}
 		else {
 			isPressed = false;
 			isHeld = false;
+			previous = current;
 		}
 	}
 	

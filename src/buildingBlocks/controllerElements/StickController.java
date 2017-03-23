@@ -4,6 +4,9 @@ import java.awt.event.ActionListener;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
+import net.java.games.input.Component.Identifier.Axis;
+import net.java.games.input.Component.Identifier.Button;
+import net.java.games.input.Controller;
 /**
  * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type.Stick Controller.Type.Stick}.
  * @author Grayson Spidle
@@ -26,13 +29,10 @@ public class StickController extends JController {
 	
 	protected static int leftStick = ANALOG_NEUTRAL;
 	protected static int rightStick = ANALOG_NEUTRAL;
+	protected static float dPad = SWITCH_NEUTRAL;
 
-	private ActionListener listener;
 	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
 
-	public boolean value = false;
-	public float analogValue = 0.0f;
-	
 	/**
 	 * The constructor.
 	 * @param arg0 The controller from which the inputs will be parsed.
@@ -46,204 +46,145 @@ public class StickController extends JController {
 	 * Call this method to get controller input (does not contain a loop)
 	 */
 	public void pollControllerInput() {
-		analogValue = 0.0f;
-
-		controller.poll();
+		if (!controller.poll()) {
+			return;
+		}
 		Component[] components = controller.getComponents();
 		for (int i = 0; i < components.length; i++) {
 			boolean isAnalog = components[i].isAnalog();
-			String name = components[i].getName();
 			Identifier id = components[i].getIdentifier();
-
-			if (isAnalog) {
-				analogValue = components[i].getPollData();
-
-				Runnable setStickAnalogValues = new Runnable() {
-					@Override
-					public void run() {
-						// ANALOG_LEFT Stick
-						if (name.equalsIgnoreCase("Y Axis")) {
-							if (analogValue == 1) leftStick = ANALOG_DOWN;
-							if (analogValue == -1) leftStick = ANALOG_UP;
-							if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
-						} else if (name.equalsIgnoreCase("X Axis") && leftStick == ANALOG_NEUTRAL) {
-							if (analogValue == 1) leftStick = ANALOG_RIGHT;
-							if (analogValue == -1) leftStick = ANALOG_LEFT;
-							if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
-						}
-
-						// ANALOG_RIGHT Stick
-						if (name.equalsIgnoreCase("Z Rotation")) {
-							if (analogValue == 1) rightStick = ANALOG_DOWN;
-							if (analogValue == -1) rightStick = ANALOG_UP;
-							if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
-						}
-						if (name.equalsIgnoreCase("X Rotation") && rightStick == ANALOG_NEUTRAL) {
-							if (analogValue == 1) rightStick = ANALOG_RIGHT;
-							if (analogValue == -1) rightStick = ANALOG_LEFT;
-							if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
-						}
+			if (isAnalog) { 
+				float analogValue = components[i].getPollData();
+				if (id.equals(Axis.Y) || id.equals(Axis.X) || id.equals(Axis.RY) || id.equals(Axis.RX)) { // TODO Make sure these work. They work with gamepad controllers but I'm not sure with stick
+					// Left Stick
+					if (id.equals(Axis.Y)) {
+						if (analogValue == 1) leftStick = ANALOG_DOWN;
+						if (analogValue == -1) leftStick = ANALOG_UP;
+						if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
 					}
-				};
-				
-				setStickAnalogValues.run();
+					else if (id.equals(Axis.X) && leftStick == ANALOG_NEUTRAL) {
+						if (analogValue == 1) leftStick = ANALOG_RIGHT;
+						if (analogValue == -1) leftStick = ANALOG_LEFT;
+						if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
+					}
+					
+					// Right Stick
+					else if (id.equals(Axis.RY)) {
+						if (analogValue == 1) rightStick = ANALOG_DOWN;
+						if (analogValue == -1) rightStick = ANALOG_UP;
+						if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
+					}
+					else if (id.equals(Axis.RX) && rightStick == ANALOG_NEUTRAL) {
+						if (analogValue == 1) rightStick = ANALOG_RIGHT;
+						if (analogValue == -1) rightStick = ANALOG_LEFT;
+						if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
+					}
+				} 
 			} else {
-				if (components[i].getPollData() == 1.0f)
-					value = true;
-				else
-					value = false;
-			}
-
-			Runnable setButtonValues = new Runnable() {
-				@Override
-				public void run() {
-					if (name.equalsIgnoreCase("Button 0")) x.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 1")) a.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 2")) b.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 3")) y.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 4")) lb.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 5")) rb.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 6")) lt.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 7")) rt.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 8")) back.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 9")) start.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 10")) ls.actionPerformed(queueControls);
-					if (name.equalsIgnoreCase("Button 11")) rs.actionPerformed(queueControls);
+				boolean value = false;
+				if (components[i].getPollData() == 1.0f) value = true;
+				if (id.equals(Button._0)) {
+					x.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._1)) {
+					a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._2)) {
+					b.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._3)) {
+					y.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._4)) {
+					lb.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._5)) {
+					rb.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._6)) {
+					lt.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._7)) {
+					rt.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._8)) {
+					back.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._9)) {
+					start.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._10)) {
+					ls.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._11)) {
+					rs.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
 				}
-			};
-
-			setButtonValues.run();
+			}
 		}
-		
-		if (listener != null) listener.actionPerformed(queueControls);
+		if (!listeners.isEmpty()) {
+			for (ActionListener l : listeners) {
+				l.actionPerformed(queueControls);
+			}
+		}
 	}
 
-	/**
-	 * Returns if a was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isAPressed() {
 		return a.isPressed();
 	}
 	
-	/**
-	 * Returns if b was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isBPressed() {
 		return b.isPressed();
 	}
 
-	/**
-	 * Returns if x was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isXPressed() {
 		return x.isPressed();
 	}
 
-	/**
-	 * Returns if y was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isYPressed() {
 		return y.isPressed();
 	}
 
-	/**
-	 * Returns if lb was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isLBPressed() {
 		return lb.isPressed();
 	}
 
-	/**
-	 * Returns if rb was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isRBPressed() {
 		return rb.isPressed();
 	}
 
-	/**
-	 * Returns if the left stick was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isLSPressed() {
 		return ls.isPressed();
 	}
 
-	/**
-	 * Returns if right stick was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isRSPressed() {
 		return rs.isPressed();
 	}
 
-	/**
-	 * Returns if lt was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isLTPressed() {
 		return lt.isPressed();
 	}
 	
-	/**
-	 * Returns if lt is held down.
-	 * @return Returns true if the button is held down returns false if it is not held down.
-	 */
 	public boolean isLTHeld() {
 		return lt.isHeld();
 	}
 	
-	/**
-	 * Returns if rt was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isRTPressed() {
 		return rt.isPressed();
 	}
 	
-	/**
-	 * Returns if rt is held down.
-	 * @return Returns true if the button is held down returns false if it is not held down.
-	 */
 	public boolean isRTHeld() {
 		return rt.isHeld();
 	}
 
-	/**
-	 * Returns if start was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isStartPressed() {
 		return start.isPressed();
 	}
 	
-	/**
-	 * Returns if back was pressed.
-	 * @return Returns true if the button was pressed and returns false if it was not pressed.
-	 */
 	public boolean isBackPressed() {
 		return back.isPressed();
 	}
 	
-	/**
-	 * Returns the left stick's direction.
-	 * @return Returns an integer reflecting the sticks direction.
-	 */
 	public int getLeftStick() {
 		return leftStick;
 	}
 
-	/**
-	 * Returns the right stick's direction.
-	 * @return Returns an integer reflecting the sticks direction.
-	 */
 	public int getRightStick() {
 		return rightStick;
+	}
+	
+	@Override
+	public float getDPad() {
+		// TODO try and get this to work
+		return SWITCH_ERROR;
 	}
 	
 	@Override
@@ -296,14 +237,9 @@ public class StickController extends JController {
 		return back.isHeld();
 	}
 	
-	/**
-	 * Sets the controller's input listener.
-	 * @param arg0 The specified ActionListener for the controller to output its controls.
-	 */
-	public void setActionListener(ActionListener arg0) {
-		listener = arg0;
+	public Controller getController() {
+		return controller;
 	}
 
 	
-
 }

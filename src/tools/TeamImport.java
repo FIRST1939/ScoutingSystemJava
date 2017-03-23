@@ -1,4 +1,4 @@
-package buildingBlocks;
+package tools;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -24,12 +24,12 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import com.google.gson.stream.JsonReader;
-import javax.swing.JLabel;
 
 public class TeamImport extends JFrame {
 
@@ -50,27 +50,12 @@ public class TeamImport extends JFrame {
 	public Names N = new Names();
 	public JTextField textField_1;
 	public int matchTotal;
-//	public PrintStream out;
-//	public PrintStream err;
-//	public JTextArea area;
-//	public JScrollPane scroll;
-//	public JScrollPane scrollPane;
-	
-	
-	
 
 	/**
 	 * Launch the application.
 	 */
 	@SuppressWarnings("unused")
 	public final File getEvent() {
-//		area = new JTextArea();
-//		area.setEditable(false);
-//		
-//		
-//		scroll = new JScrollPane();
-//		scroll.setViewportView(area);
-		
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -100,27 +85,6 @@ public class TeamImport extends JFrame {
 	 * Create the frame.
 	 */
 	public TeamImport() {
-//		out = new PrintStream(new OutputStream() {
-//
-//			@Override
-//			public void write(int b) throws IOException {
-//				char c = (char) b;
-//				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
-//			}
-//			
-//		});
-//		
-//		err = new PrintStream(new OutputStream() {
-//
-//			@Override
-//			public void write(int b) throws IOException {
-//				char c = (char) b;
-//				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
-//			}
-//			
-//		});
-//		System.setOut(out);
-//		System.setErr(err);
 		setForeground(Color.WHITE);
 		setTitle("Import");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -129,9 +93,6 @@ public class TeamImport extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-//		area = new JTextArea();
-//		area.setEditable(false);
 		
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
@@ -186,23 +147,6 @@ public class TeamImport extends JFrame {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-//		scrollPane = new JScrollPane();
-//		scrollPane.setBounds(10, 42, 414, 209);
-//		contentPane.add(scrollPane);
-//		scrollPane.setViewportView(area);
-//		
-//		
-//		
-//		
-//	}
-//	public void actionPerformed(ActionEvent e) {
-//		if (e.getActionCommand().equals("write")) {
-//			char c = (char) e.getSource();
-//			area.setText(area.getText() + c);
-//		}
-//		else if (e.getActionCommand().equals("clear")) {
-//			area.setText("");
-//		}
 	}
 	public void addFullEvent(){
 		for (int i = 1; i<= matchTotal; i++){

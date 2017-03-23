@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
  */
 public class ControllerButton implements ActionListener {
 	
+	private String name = "";
 	private boolean current = false;
 	private boolean previous = current;
 	private boolean isPressed = false;
@@ -25,30 +26,8 @@ public class ControllerButton implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().getClass().isAssignableFrom(GamepadController.class)) {
-			GamepadController source = (GamepadController) e.getSource();
-			current = source.value;
-			
-			if (previous && !current) {
-				isPressed = true;
-				isHeld = false;
-				previous = current;
-			}
-			else if (previous && current) {
-				isPressed = false;
-				isHeld = true;
-				previous = current;
-			}
-			else {
-				isPressed = false;
-				isHeld = false;
-				previous = current;
-			}
-		}
-		else if (e.getSource().getClass().isAssignableFrom(StickController.class)) {
-			StickController source = (StickController) e.getSource();
-			current = source.value;
-			
+		if (e.getSource().getClass().isAssignableFrom(JController.class)) {
+			current = Boolean.parseBoolean(e.getActionCommand());
 			if (previous && !current) {
 				isPressed = true;
 				isHeld = false;
@@ -66,7 +45,7 @@ public class ControllerButton implements ActionListener {
 			}
 		}
 		else {
-			System.err.println("Invalid controller type. Failed to update controller button state.");
+			System.err.println("Failed to update controller button state. Invalid source type");
 		}
 	}
 	
@@ -76,5 +55,13 @@ public class ControllerButton implements ActionListener {
 	
 	protected boolean isHeld() {
 		return isHeld;
+	}
+	
+	public void setName(String arg0) {
+		name = arg0;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
