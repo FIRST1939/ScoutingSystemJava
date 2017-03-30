@@ -314,7 +314,10 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 		panels.add(panel);
 		contentPane.add(panel);
 	}
-	
+	/**
+	 * creating a arraylist of an arraylist of string for the new team numbers
+	 * @return 
+	 */
 	public ArrayList<ArrayList<String>> makeFullArray() {
 		ArrayList<ArrayList<String>> output = new ArrayList<ArrayList<String>>();
 		ArrayList<String> OuterArray = new ArrayList<String>();
@@ -335,7 +338,10 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 		
 		return output;
 	}
-
+	/**
+	 * setting the matchCount to 0
+	 * @param matchCount
+	 */
 	public void setMatchReset(int matchCount) {
 		// TODO Auto-generated method stub
 		matchCount = 0;
