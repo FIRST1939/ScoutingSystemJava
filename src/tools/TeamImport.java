@@ -1,9 +1,7 @@
-package buildingBlocks;
+package tools;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -13,9 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,48 +24,38 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import com.google.gson.stream.JsonReader;
-import javax.swing.JScrollBar;
 
 public class TeamImport extends JFrame {
 
+	/**
+	 * 
+	 */
+	public static final long serialVersionUID = 1L;
 	static String matchKey = "";
 	static Object result;
 	static final String EVENT_URL_BASE = "https://www.thebluealliance.com/api/v2/event/";
 	static final String MATCH_URL_BASE = "https://www.thebluealliance.com/api/v2/match/";
 	static final String URL_END = "?X-TBA-App-Id=frc1939:ScoutingSystem:v2";
-	private JPanel contentPane;
-	private JTextField textField;
+	public JPanel contentPane;
+	public JTextField textField;
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 	ArrayList<String> output = new ArrayList<String>();
 	public static String name = "";
-	private Names N = new Names();
-//	public PrintStream out;
-//	public PrintStream err;
-//	public JTextArea area;
-//	public JScrollPane scroll;
-//	private JScrollPane scrollPane;
-	
-	
-	
+	public Names N = new Names();
+	public JTextField textField_1;
+	public int matchTotal;
 
 	/**
 	 * Launch the application.
 	 */
-	private final File getEvent() {
-//		area = new JTextArea();
-//		area.setEditable(false);
-//		
-//		
-//		scroll = new JScrollPane();
-//		scroll.setViewportView(area);
-		
+	@SuppressWarnings("unused")
+	public final File getEvent() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -100,27 +85,6 @@ public class TeamImport extends JFrame {
 	 * Create the frame.
 	 */
 	public TeamImport() {
-//		out = new PrintStream(new OutputStream() {
-//
-//			@Override
-//			public void write(int b) throws IOException {
-//				char c = (char) b;
-//				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
-//			}
-//			
-//		});
-//		
-//		err = new PrintStream(new OutputStream() {
-//
-//			@Override
-//			public void write(int b) throws IOException {
-//				char c = (char) b;
-//				TeamImport.this.actionPerformed(new ActionEvent(c, ActionEvent.ACTION_PERFORMED, "write"));
-//			}
-//			
-//		});
-//		System.setOut(out);
-//		System.setErr(err);
 		setForeground(Color.WHITE);
 		setTitle("Import");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -130,19 +94,13 @@ public class TeamImport extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-//		area = new JTextArea();
-//		area.setEditable(false);
-		
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-				
-				addMatch();
-				
+				addFullEvent();
 				}
-				
 			}
 		});
 		textField.setBounds(89, 11, 256, 20);
@@ -170,28 +128,37 @@ public class TeamImport extends JFrame {
 		btnSave.setBounds(355, 8, 69, 23);
 		contentPane.add(btnSave);
 		
-//		scrollPane = new JScrollPane();
-//		scrollPane.setBounds(10, 42, 414, 209);
-//		contentPane.add(scrollPane);
-//		scrollPane.setViewportView(area);
-//		
-//		
-//		
-//		
-//	}
-//	public void actionPerformed(ActionEvent e) {
-//		if (e.getActionCommand().equals("write")) {
-//			char c = (char) e.getSource();
-//			area.setText(area.getText() + c);
-//		}
-//		else if (e.getActionCommand().equals("clear")) {
-//			area.setText("");
-//		}
+		JLabel lblMatchCount = new JLabel("Match Count");
+		lblMatchCount.setBounds(20, 45, 69, 14);
+		contentPane.add(lblMatchCount);
+		
+		textField_1 = new JTextField();
+		textField_1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
+					matchTotal = Integer.parseInt(textField_1.getText());
+					
+					System.out.println("Match count is: " + matchTotal);
+				}
+			}
+		});
+		textField_1.setBounds(89, 42, 86, 20);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		
 	}
-	private void addMatch(){
+	public void addFullEvent(){
+		for (int i = 1; i<= matchTotal; i++){
+			String path = textField.getText() + i;
+			addMatch(path);
+			
+		}
+	}
+	public void addMatch(String path){
 		List<String> the = new ArrayList<String>();
 		try {
-			the =  getTeamNumbers(textField.getText());
+			the =  getTeamNumbers(path);
 			String adding = "";
 			for (int i = 0; i<the.size(); i++){
 				if(i == the.size()-1){
@@ -214,7 +181,7 @@ public class TeamImport extends JFrame {
 	}
 	
 	
-	private final void write(JButton ep){
+	public final void write(JButton ep){
 		
 		File file = new File(this.defaultSaveFile+"\\"+name + ".txt");
 		
@@ -240,7 +207,7 @@ public class TeamImport extends JFrame {
 		
 	}	
 	
-	private static JsonReader createMatchJsonReader(String matchId) throws IOException {
+	public static JsonReader createMatchJsonReader(String matchId) throws IOException {
 		try {
 			URL url = new URL(MATCH_URL_BASE + matchId + URL_END);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -259,7 +226,7 @@ public class TeamImport extends JFrame {
 		}
 		return null;
 	}
-	private static List<String> readTeamNumbers(JsonReader reader) throws IOException {
+	public static List<String> readTeamNumbers(JsonReader reader) throws IOException {
 		List<String> output = new ArrayList<String>();
 		
 		reader.beginObject();
@@ -277,7 +244,7 @@ public class TeamImport extends JFrame {
 		return output;
 	}
 	
-	private static List<String> readAlliances(JsonReader reader) throws IOException {
+	public static List<String> readAlliances(JsonReader reader) throws IOException {
 		List<String> output = new Vector<String>();
 		reader.beginObject();
 		while (reader.hasNext()) {
@@ -297,7 +264,7 @@ public class TeamImport extends JFrame {
 	}	
 	
 	
-	private static List<String> readAlliance(JsonReader reader) throws IOException {
+	public static List<String> readAlliance(JsonReader reader) throws IOException {
 		List<String> output = new Vector<String>();
 		reader.beginObject();
 		while (reader.hasNext()) {
@@ -313,7 +280,7 @@ public class TeamImport extends JFrame {
 		return output;
 	}
 
-	private static List<String> readTeams(JsonReader reader) throws IOException {
+	public static List<String> readTeams(JsonReader reader) throws IOException {
 		Vector<String> output = new Vector<String>();
 		reader.beginArray();
 		while (reader.hasNext()) {

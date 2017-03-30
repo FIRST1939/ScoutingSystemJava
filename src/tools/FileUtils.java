@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -33,10 +34,23 @@ public class FileUtils {
 		output.close();
 	}
 	
+	public static void writeNewMatch(File file, ArrayList<ArrayList<String>> match) throws IOException{
+		try {
+			
+			for (int i = 0; i<match.size(); i++){
+				ArrayList<String> in = match.get(i);
+				String str = in.toString();				
+				Files.write(file.toPath(), (str+ "\n").getBytes(),StandardOpenOption.APPEND);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void write(File file, List<? extends Object> lines) throws FileNotFoundException {
 		PrintWriter output = new PrintWriter(file);
 		for (Object o : lines) {
-			output.println(o.toString());
+			output.append(o.toString() + "\n");
 		}
 		output.close();
 	}

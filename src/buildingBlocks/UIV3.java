@@ -25,6 +25,8 @@ import javax.swing.JToggleButton;
 import tools.ExportData;
 import tools.FileUtils;
 import tools.ImageUtils;
+import tools.TeamImport;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,11 +35,11 @@ import java.awt.event.MouseEvent;
  * @author Grayson Spidle
  *
  */
-public class UIV3 extends JFrame implements ActionListener, ContainerListener {
+public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends RobotPanel>> extends JFrame implements ActionListener, ContainerListener {
 
 	private static final long serialVersionUID = 8974473527856329569L;
 	
-	public Vector<RobotTabbedPanel> panels = new Vector<RobotTabbedPanel>();
+	public Vector<P> panels = new Vector<P>();
 	
 	protected final JToggleButton TOGGLE_VALUES_EDITABILITY = new JToggleButton("Toggle Editability");
 
@@ -48,9 +50,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	protected final JMenu MENU_DEBUG = new JMenu("Debug");
 
 	protected final JMenuItem ITEM_IMPORT_TEAM_NUMBERS = new JMenuItem("Import Team Numbers");
-	protected final JMenuItem ITEM_TO_CSV = new JMenuItem("to .csv");
 	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Next");
-	protected final JMenuItem ITEM_SHOW_CONSOLE = new JMenuItem("Show Console");
 	
 	public JPanel contentPane = new JPanel();
 
@@ -59,9 +59,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	public File teleoperatedSaveFile = null;
 	protected File defaultSaveFile = new File((System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 
-//	public final ConsoleWindow CONSOLE = new ConsoleWindow();
 	public final TeamImport TI = new TeamImport();
-	
 	
 	private boolean editability = false;
 	private final JMenuItem TEAM_GETTER = new JMenuItem("TEAM GETTER THING");
@@ -76,26 +74,17 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		
 		MENU_BAR.setName("menuBar");
 		setJMenuBar(MENU_BAR);
-		
-		ITEM_TO_CSV.setActionCommand("convert to csv");
-		ITEM_TO_CSV.addActionListener(this);
-		ITEM_TO_CSV.setName("itemToCSV");
 
 		ITEM_IMPORT_TEAM_NUMBERS.setActionCommand("update team numbers");
 		ITEM_IMPORT_TEAM_NUMBERS.addActionListener(this);
 		ITEM_IMPORT_TEAM_NUMBERS.setName("itemImportTeamNumbers");
 						
-		ITEM_SHOW_CONSOLE.setActionCommand("show system log");
-		ITEM_SHOW_CONSOLE.addActionListener(this);
-		ITEM_SHOW_CONSOLE.setName("itemShowConsole");
-		
 		TOGGLE_VALUES_EDITABILITY.setActionCommand("toggle editability");
 		TOGGLE_VALUES_EDITABILITY.addActionListener(this);
 		TOGGLE_VALUES_EDITABILITY.setName("toggleValuesEditability");
 		
 		MENU_EXPORT.setText("Export");
 		MENU_EXPORT.setName("menuExport");
-		MENU_EXPORT.add(ITEM_TO_CSV);
 		MENU_BAR.add(MENU_EXPORT);
 
 		MENU_COMPETITION.setText("Competition");
@@ -113,7 +102,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		
 		MENU_DEBUG.setText("Debug");
 		MENU_DEBUG.setName("menuDebug");
-		MENU_DEBUG.add(ITEM_SHOW_CONSOLE);
 		MENU_DEBUG.add(TOGGLE_VALUES_EDITABILITY);
 		MENU_BAR.add(MENU_DEBUG);
 		
@@ -133,10 +121,6 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		if (event.getActionCommand().equals("convert to csv")) {// CSV conversion
 			getSaveLocation();
 			ExportData.toCSV(this);
-		} 
-		
-		else if (event.getActionCommand().equals("show system log")) { // Shows the ConsoleWindow 
-//			CONSOLE.setVisible(true);
 		}
 		else if (event.getActionCommand().equals("toggle editability")) {
 			editability = !editability;
@@ -150,7 +134,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	public void componentAdded(ContainerEvent arg0) {
 		Object o = arg0.getChild();
 		if (o.getClass().isAssignableFrom(RobotTabbedPanel.class)) {
-			panels.add((RobotTabbedPanel) o);
+			panels.add((P) o);
 		}
 	}
 
@@ -158,7 +142,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	public void componentRemoved(ContainerEvent arg0) {
 		Object o = arg0.getChild();
 		if (o.getClass().isAssignableFrom(RobotTabbedPanel.class)) {
-			this.remove((RobotTabbedPanel) o);
+			this.remove((P) o);
 		}
 	}
 	
@@ -244,9 +228,9 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 		AL = makeArrayList(f);
 	}
 	/**
-	 * Finds
+	 * Finds the save file for autosavefile and telesavefile
 	 */
-	private final void getSaveLocation() {
+	public final void getSaveLocation() {
 		// Autonomous Save File
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -326,7 +310,7 @@ public class UIV3 extends JFrame implements ActionListener, ContainerListener {
 	 * Adds a RobotTabbedPanel to the UI.
 	 * @param panel The panel to add.	
 	 */
-	public final void add(RobotTabbedPanel panel) {
+	public final void add(P panel) {
 		panels.add(panel);
 		contentPane.add(panel);
 	}

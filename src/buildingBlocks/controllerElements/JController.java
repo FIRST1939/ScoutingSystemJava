@@ -1,19 +1,49 @@
 package buildingBlocks.controllerElements;
 
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
+
+import net.java.games.input.Rumbler;
 
 public abstract class JController {
 
+	/**
+	 * Use this value when there is an error
+	 */
 	public static final int ANALOG_ERROR = -1;
+	/**
+	 * This value is used when an analog stick is not pointed in a particular direction.
+	 */
 	public static final int ANALOG_NEUTRAL = 0;
+	/**
+	 * This value is used when an analog stick is pointed up.
+	 */
 	public static final int ANALOG_UP = 1;
+	/**
+	 * This value is used when an analog stick is pointed down.
+	 */
 	public static final int ANALOG_DOWN = 2;
+	/**
+	 * This value is used when an analog stick is pointed left.
+	 */
 	public static final int ANALOG_LEFT = 3;
-	public static final int ANALOG_RIGHT = 4;
-
+	/**
+	 * This value is used when an analog stick is pointed right.
+	 */
+	public static final int ANALOG_RIGHT
+	public static final float SWITCH_ERROR = -1f;
+	public static final float SWITCH_NEUTRAL = 0f;
+	public static final float SWITCH_UP = 0.25f;
+	public static final float SWITCH_RIGHT = 0.5f;
+	public static final float SWITCH_DOWN = 0.75f;
+	public static final float SWITCH_LEFT = 1f;
+	
+	public net.java.games.input.Controller controller;
+	protected List<ActionListener> listeners = new Vector<ActionListener>();
+	
 	protected net.java.games.input.Controller controller;
 	protected ActionListener listener;
-
 	public int robotPanelNumber = -1;
 
 	public JController(net.java.games.input.Controller arg0, int controlsWhichRobotPanel) {
@@ -148,7 +178,6 @@ public abstract class JController {
 	 * @return Returns true if the button is held down returns false if it is not held down.
 	 */
 	public abstract boolean isLTHeld();
-
 	/**
 	 * Returns if rt was pressed.
 	 * 
@@ -205,8 +234,23 @@ public abstract class JController {
 	 */
 	public abstract int getRightStick();
 
-	public void setActionListener(ActionListener listener) {
-		this.listener = listener;
+	/**
+	 * Returns the dpad's direction.
+	 * @return Returns a float reflecting the directional pad's direction.
+	 */
+	public abstract float getDPad();
+	
+	public void rumble(float intensity) {
+		for (Rumbler r : controller.getRumblers()) {
+			r.rumble(intensity);
+		}
 	}
-
+	
+	public void addActionListener(ActionListener listener) {
+		this.listeners.add(listener);
+	}
+	
+	public void removeActionListener(ActionListener listener) {
+		this.listeners.remove(listener);
+	}
 }

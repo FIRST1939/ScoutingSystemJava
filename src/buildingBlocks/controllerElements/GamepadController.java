@@ -1,38 +1,40 @@
 package buildingBlocks.controllerElements;
+import static buildingBlocks.controllerElements.ControllerTrigger.LEFT_TRIGGER;
+import static buildingBlocks.controllerElements.ControllerTrigger.RIGHT_TRIGGER;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
+import net.java.games.input.Component.Identifier.Axis;
+import net.java.games.input.Component.Identifier.Button;
+import net.java.games.input.Controller;
 /**
  * This class handles the inputs for controllers of {@link net.java.games.input.Controller.Type Controller.Type} Gamepad.
  * @author Grayson Spidle
  */
 public class GamepadController extends JController {
 	
-	public ControllerButton a = new ControllerButton();
-	public ControllerButton b = new ControllerButton();
-	public ControllerButton x = new ControllerButton();
-	public ControllerButton y = new ControllerButton();
-	public ControllerButton lb = new ControllerButton();
-	public ControllerButton rb = new ControllerButton();
-	public ControllerButton start = new ControllerButton();
-	public ControllerButton back = new ControllerButton();
-	public ControllerButton ls = new ControllerButton();
-	public ControllerButton rs = new ControllerButton();
+	protected ControllerButton a = new ControllerButton();
+	protected ControllerButton b = new ControllerButton();
+	protected ControllerButton x = new ControllerButton();
+	protected ControllerButton y = new ControllerButton();
+	protected ControllerButton lb = new ControllerButton();
+	protected ControllerButton rb = new ControllerButton();
+	protected ControllerButton start = new ControllerButton();
+	protected ControllerButton back = new ControllerButton();
+	protected ControllerButton ls = new ControllerButton();
+	protected ControllerButton rs = new ControllerButton();
 	
-	public ControllerTrigger lt = new ControllerTrigger(ControllerTrigger.LEFT_TRIGGER);
-	public ControllerTrigger rt = new ControllerTrigger(ControllerTrigger.RIGHT_TRIGGER);
+	protected ControllerTrigger lt = new ControllerTrigger(LEFT_TRIGGER);
+	protected ControllerTrigger rt = new ControllerTrigger(RIGHT_TRIGGER);
 	
-	public int leftStick = ANALOG_NEUTRAL;
-	public int rightStick = ANALOG_NEUTRAL;
+	protected int leftStick = ANALOG_NEUTRAL;
+	protected int rightStick = ANALOG_NEUTRAL;
+	protected float dPad = SWITCH_NEUTRAL;
 	
 	private ActionEvent queueControls = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "find the holy grail!");
-	
-	public int robotPanelNumber = -1;
-	
-	public boolean value = false;
-	public float analogValue = 0.0f;
 	
 	/**
 	 * The constructor.
@@ -47,79 +49,87 @@ public class GamepadController extends JController {
 	 * Call this method to get controller input (does not contain a loop)
 	 */
 	public void pollControllerInput() {
-			
-		analogValue = 0.0f;
-		
-		controller.poll();
+		if (!controller.poll()) {
+			return;
+		}
 		Component[] components = controller.getComponents();
 		for (int i = 0; i < components.length; i++) {
-				
+			
+			Component comp = components[i];
 			boolean isAnalog = components[i].isAnalog();
-			String name = components[i].getName();
+			Identifier id = components[i].getIdentifier();
 				
 			if (isAnalog) {
-				analogValue = components[i].getPollData();
-				
-				if (name.equalsIgnoreCase("Z Axis")) {
-					lt.actionPerformed(queueControls);
-					rt.actionPerformed(queueControls);
-				}
-				
-				Runnable setStickAnalogValues = new Runnable() {
-
-					@Override
-					public void run() {
-						// ANALOG_LEFT Stick
-						if (name.equalsIgnoreCase("Y Axis")) {
-							if (analogValue == 1) leftStick = ANALOG_DOWN;
-							if (analogValue == -1) leftStick = ANALOG_UP;
-							if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
-						}
-						else if (name.equalsIgnoreCase("X Axis") && leftStick == ANALOG_NEUTRAL) {
-							if (analogValue == 1) leftStick = ANALOG_RIGHT;
-							if (analogValue == -1) leftStick = ANALOG_LEFT;
-							if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
-						}
-						
-						// ANALOG_RIGHT Stick
-						if (name.equalsIgnoreCase("Y Rotation")) {
-							if (analogValue == 1) rightStick = ANALOG_DOWN;
-							if (analogValue == -1) rightStick = ANALOG_UP;
-							if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
-						}
-						if (name.equalsIgnoreCase("X Rotation") && rightStick == ANALOG_NEUTRAL) {
-							if (analogValue == 1) rightStick = ANALOG_RIGHT;
-							if (analogValue == -1) rightStick = ANALOG_LEFT;
-							if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
-						}
+				float analogValue = components[i].getPollData();
+				if (id.equals(Axis.Z)) {
+					lt.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(analogValue)));
+					rt.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(analogValue)));
+				} else if (id.equals(Axis.Y) || id.equals(Axis.X) || id.equals(Axis.RY) || id.equals(Axis.RX)) {
+					// Left Stick
+					if (id.equals(Axis.Y)) {
+						if (analogValue == 1) leftStick = ANALOG_DOWN;
+						if (analogValue == -1) leftStick = ANALOG_UP;
+						if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
 					}
-				};
-				
-				setStickAnalogValues.run();
-				
-			} 
-			
-			else {
-				if (components[i].getPollData() == 1.0f) value = true;
-					else value = false;
+					else if (id.equals(Axis.X) && leftStick == ANALOG_NEUTRAL) {
+						if (analogValue == 1) leftStick = ANALOG_RIGHT;
+						if (analogValue == -1) leftStick = ANALOG_LEFT;
+						if (analogValue != -1 && analogValue != 1) leftStick = ANALOG_NEUTRAL;
+					}
+					
+					// Right Stick
+					if (id.equals(Axis.RY)) {
+						if (analogValue == 1) rightStick = ANALOG_DOWN;
+						if (analogValue == -1) rightStick = ANALOG_UP;
+						if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
+					}
+					else if (id.equals(Axis.RX) && rightStick == ANALOG_NEUTRAL) {
+						if (analogValue == 1) rightStick = ANALOG_RIGHT;
+						if (analogValue == -1) rightStick = ANALOG_LEFT;
+						if (analogValue != -1 && analogValue != 1) rightStick = ANALOG_NEUTRAL;
+					}
 				}
-			
-			if (name.equalsIgnoreCase("Button 0")) a.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 1")) b.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 2")) x.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 3")) y.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 4")) lb.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 5")) rb.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 6")) back.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 7")) start.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 8")) ls.actionPerformed(queueControls);
-			if (name.equalsIgnoreCase("Button 9")) rs.actionPerformed(queueControls);
-			
-			controller.getComponent(Identifier.Axis.POV).getPollData();
-			
+				
+			} else if (id.equals(Axis.POV)) { // D-Pad
+				float data = comp.getPollData();
+				if (data == SWITCH_NEUTRAL) dPad = SWITCH_NEUTRAL;
+				else if (data == SWITCH_UP) dPad = SWITCH_UP;
+				else if (data == SWITCH_LEFT) dPad = SWITCH_LEFT;
+				else if (data == SWITCH_DOWN) dPad = SWITCH_DOWN;
+				else if (data == SWITCH_RIGHT) dPad = SWITCH_RIGHT;
+				else dPad = SWITCH_ERROR;
+			} else { // Buttons
+				boolean value = false;
+				if (comp.getPollData() == 1.0f) value = true;
+				if (id.equals(Button._0)) {
+					a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._1)) {
+					b.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._2)) {
+					x.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._3)) {
+					y.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._4)) {
+					lb.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._5)) {
+					rb.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._6)) {
+					back.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._7)) {
+					start.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._8)) {
+					ls.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				} else if (id.equals(Button._9)) {
+					rs.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, String.valueOf(value)));
+				}
+			}
 		}
 		
-		if (listener != null) listener.actionPerformed(queueControls);
+		if (!listeners.isEmpty()) {
+			for (ActionListener l : listeners) {
+				l.actionPerformed(queueControls);
+			}
+		}
 		
 	}
 	
@@ -183,13 +193,16 @@ public class GamepadController extends JController {
 		return rightStick;
 	}
 	
+	public float getDPad() {
+		return dPad;
+	}
+	
 	@Override
 	public boolean isBackPressed() {
 		return back.isPressed();
 	}
 
 	@Override
-
 	public boolean isAHeld() {
 		return a.isHeld();
 	}
@@ -239,14 +252,9 @@ public class GamepadController extends JController {
 		return back.isHeld();
 	}
 	
-	/**
-	 * Sets the controller's input listener.
-	 * @param arg0 The specified ActionListener for the controller to output its controls.
-	 */
-	public void setActionListener(ActionListener arg0) {
-		listener = arg0;
+	public Controller getController() {
+		return controller;
 	}
-
 	
 }
 	
