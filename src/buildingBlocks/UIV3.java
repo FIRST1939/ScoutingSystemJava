@@ -50,6 +50,7 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 	protected final JMenu MENU_DEBUG = new JMenu("Debug");
 
 	protected final JMenuItem ITEM_IMPORT_TEAM_NUMBERS = new JMenuItem("Import Team Numbers");
+	protected final JMenuItem ITEM_TO_CSV = new JMenuItem("to .csv");
 	protected final JMenuItem ITEM_TEAM_GET = new JMenuItem("Next");
 	
 	public JPanel contentPane = new JPanel();
@@ -74,6 +75,10 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 		
 		MENU_BAR.setName("menuBar");
 		setJMenuBar(MENU_BAR);
+		
+		ITEM_TO_CSV.setActionCommand("convert to csv");
+		ITEM_TO_CSV.addActionListener(this);
+		ITEM_TO_CSV.setName("itemToCSV");
 
 		ITEM_IMPORT_TEAM_NUMBERS.setActionCommand("update team numbers");
 		ITEM_IMPORT_TEAM_NUMBERS.addActionListener(this);
@@ -85,6 +90,7 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 		
 		MENU_EXPORT.setText("Export");
 		MENU_EXPORT.setName("menuExport");
+		MENU_EXPORT.add(ITEM_TO_CSV);
 		MENU_BAR.add(MENU_EXPORT);
 
 		MENU_COMPETITION.setText("Competition");
@@ -121,6 +127,10 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 		if (event.getActionCommand().equals("convert to csv")) {// CSV conversion
 			getSaveLocation();
 			ExportData.toCSV(this);
+		} 
+		
+		else if (event.getActionCommand().equals("show system log")) { // Shows the ConsoleWindow 
+//			CONSOLE.setVisible(true);
 		}
 		else if (event.getActionCommand().equals("toggle editability")) {
 			editability = !editability;
@@ -228,7 +238,7 @@ public class UIV3<P extends RobotTabbedPanel<? extends RobotPanel, ? extends Rob
 		AL = makeArrayList(f);
 	}
 	/**
-	 * Finds the save file for autosavefile and telesavefile
+	 * Finds
 	 */
 	public final void getSaveLocation() {
 		// Autonomous Save File
