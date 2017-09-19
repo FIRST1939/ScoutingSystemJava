@@ -122,7 +122,7 @@ public class StickController extends JController {
 			 for (ActionListener l : listeners) {
 				  l.actionPerformed(queueControls);
 		  }
-		 }
+		 }}
    }
     
 	@Override

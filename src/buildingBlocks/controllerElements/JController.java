@@ -31,7 +31,7 @@ public abstract class JController {
 	/**
 	 * This value is used when an analog stick is pointed right.
 	 */
-	public static final int ANALOG_RIGHT
+	public static final int ANALOG_RIGHT = 4;
 	public static final float SWITCH_ERROR = -1f;
 	public static final float SWITCH_NEUTRAL = 0f;
 	public static final float SWITCH_UP = 0.25f;
@@ -39,7 +39,6 @@ public abstract class JController {
 	public static final float SWITCH_DOWN = 0.75f;
 	public static final float SWITCH_LEFT = 1f;
 	
-	public net.java.games.input.Controller controller;
 	protected List<ActionListener> listeners = new Vector<ActionListener>();
 	
 	protected net.java.games.input.Controller controller;
