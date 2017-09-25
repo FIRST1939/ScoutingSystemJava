@@ -1,8 +1,5 @@
 package buildingBlocks;
 
-import java.util.List;
-import java.util.Vector;
-
 import javax.swing.JTextField;
 
 /**
@@ -12,31 +9,31 @@ import javax.swing.JTextField;
 public class ScoreField extends JTextField {
 	
 	private static final long serialVersionUID = 27047816357232198L;
-	protected Vector<ValueChangeListener> listeners;
-
+	
+	private String defaultValue = "";
+	
 	public ScoreField() {
 		super();
 		this.putClientProperty("JComponent.sizeVariant", "large");
-		listeners = new Vector<ValueChangeListener>();
+	}
+	
+	public void setDefaultValue(String arg0) {
+		defaultValue = arg0;
+	}
+	
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 	
 	public void setText(String arg0) {
 		super.setText(arg0);
-		updateListeners(new ValueChangeEvent(this, "change"));
 	}
 	
-	public void addValueChangeListener(ValueChangeListener listener) {
-		listeners.add(listener);
-	}
-	
-	public List<ValueChangeListener> getListeners() {
-		return listeners;
-	}
-	
-	protected void updateListeners(ValueChangeEvent e) {
-		for (ValueChangeListener l : listeners) {
-			l.valueChanged(e);
-		}
+	/**
+	 * A convenience method for setText(getDefaultValue)
+	 */
+	public void reset() {
+		this.setText(defaultValue);
 	}
 	
 	public String toString() {

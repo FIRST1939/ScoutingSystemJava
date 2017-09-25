@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * The utilities for writing and reading files. 
@@ -21,38 +20,48 @@ public class FileUtils {
 	 * Writes the specified list to the specified file.
 	 * @param file The specified file.
 	 * @param lines The specified list of Strings to write.
-	 * @throws FileNotFoundException Pasted from PrinterWriter - If the given file object does not denote an existing, writable regular file and a new regular file of that name cannot be created, or if some other error occurs while opening or creating the file
+	 * @param option The desired method of writing the given data
+	 * @throws IOException 
 	 */
-	public static void write(File file, ArrayList<Vector<String>> lines) throws FileNotFoundException {
-		PrintWriter output = new PrintWriter(file);
-		for (int i = 0; i < lines.size(); i++) {
-			String temp = lines.get(i).toString();
-			temp = temp.replace("[", "");
-			temp = temp.replace("]", "");
-			output.println(temp);
+	public static void write(File file, List<List<String>> lines, StandardOpenOption option) throws IOException {
+		// TODO Test this 
+		StringBuilder sb = new StringBuilder();
+		for (List<String> ls : lines) {
+			for (String s : ls) {
+				sb.append(s + ",");
+			}
+			sb = new StringBuilder(sb.substring(0, sb.length() - 2));
+			sb.append(System.lineSeparator());
 		}
-		output.close();
+		if (file.exists()) Files.write(file.toPath(), sb.toString().getBytes(), option);
+		else Files.write(file.toPath(), sb.toString().getBytes(), StandardOpenOption.CREATE_NEW);
+//		PrintWriter output = new PrintWriter(file);
+//		for (int i = 0; i < lines.size(); i++) {
+//			String temp = lines.get(i).toString();
+//			temp = temp.replace("[", "");
+//			temp = temp.replace("]", "");
+//			output.println(temp);
+//		}
+//		output.close();
 	}
 	
+	/**
+	 * Use the write method instead
+	 * @param file
+	 * @param match
+	 * @throws IOException
+	 */
+	@Deprecated
 	public static void writeNewMatch(File file, ArrayList<ArrayList<String>> match) throws IOException{
 		try {
-			
 			for (int i = 0; i<match.size(); i++){
 				ArrayList<String> in = match.get(i);
 				String str = in.toString();				
 				Files.write(file.toPath(), (str+ "\n").getBytes(),StandardOpenOption.APPEND);
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public static void write(File file, List<? extends Object> lines) throws FileNotFoundException {
-		PrintWriter output = new PrintWriter(file);
-		for (Object o : lines) {
-			output.append(o.toString() + "\n");
-		}
-		output.close();
 	}
 	
 	/**

@@ -6,10 +6,15 @@ import java.util.Vector;
 
 import net.java.games.input.Rumbler;
 
+/**
+ * Provides the framework to create other controllers.
+ * @author Grayson Spidle
+ *
+ */
 public abstract class JController {
 
 	/**
-	 * Use this value when there is an error
+	 * This value is used when there is an error
 	 */
 	public static final int ANALOG_ERROR = -1;
 	/**
@@ -31,7 +36,7 @@ public abstract class JController {
 	/**
 	 * This value is used when an analog stick is pointed right.
 	 */
-	public static final int ANALOG_RIGHT
+	public static final int ANALOG_RIGHT = 4;
 	public static final float SWITCH_ERROR = -1f;
 	public static final float SWITCH_NEUTRAL = 0f;
 	public static final float SWITCH_UP = 0.25f;
@@ -42,7 +47,6 @@ public abstract class JController {
 	public net.java.games.input.Controller controller;
 	protected List<ActionListener> listeners = new Vector<ActionListener>();
 	
-	protected net.java.games.input.Controller controller;
 	protected ActionListener listener;
 	public int robotPanelNumber = -1;
 
@@ -124,14 +128,14 @@ public abstract class JController {
 	public abstract boolean isLBHeld();
 
 	/**
-	 * Returns if rb was pressed.
+	 * Returns if the right button was pressed.
 	 * 
 	 * @return Returns true if the button was pressed and returns false if it was not pressed.
 	 */
 	public abstract boolean isRBPressed();
 
 	/**
-	 * Returns if rb was held.
+	 * Returns if the right button was held.
 	 * 
 	 * @return Returns true if the button was held and returns false if it was not held.
 	 */

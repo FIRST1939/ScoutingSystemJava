@@ -18,12 +18,12 @@ import memerbeens.FocusTraversalOnArray;
  * @author Grayson Spidle
  *
  */
-public abstract class RobotTabbedPanel<K extends RobotPanel,V extends RobotPanel> extends JTabbedPane {
+public abstract class RobotTabbedPanel<AutonomousPanel extends RobotPanel,TeleoperatedPanel extends RobotPanel> extends JTabbedPane {
 	
 	private static final long serialVersionUID = 4952300412598887831L;
 	
-	public K autonomous;
-	public V teleoperated;
+	public AutonomousPanel autonomous;
+	public TeleoperatedPanel teleoperated;
 	
 	public Color allianceColor = null;
 	
@@ -32,7 +32,7 @@ public abstract class RobotTabbedPanel<K extends RobotPanel,V extends RobotPanel
 	 * @param autonomous The autonomous panel.
 	 * @param teamColor The teleoperated panel.
 	 */
-	public RobotTabbedPanel(K autonomous, V teleoperated) {
+	public RobotTabbedPanel(AutonomousPanel autonomous, TeleoperatedPanel teleoperated) {
 		
 		this.autonomous = autonomous;
 		this.teleoperated = teleoperated;

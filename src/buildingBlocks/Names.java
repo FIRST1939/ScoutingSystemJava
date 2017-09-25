@@ -1,15 +1,14 @@
 package buildingBlocks;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.Window.Type;
 import javax.swing.JTextField;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import javax.swing.border.EmptyBorder;
+
+import tools.TeamImport;
 
 public class Names extends JFrame {
 

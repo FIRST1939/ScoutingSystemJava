@@ -54,7 +54,6 @@ public class TeamImport extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	@SuppressWarnings("unused")
 	public final File getEvent() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -309,13 +308,13 @@ public class TeamImport extends JFrame {
 			nums.set(i, nums.get(i).replace("frc", ""));
 		}
 		
-		Vector<String> temp = new Vector<String>();
-		temp.add(nums.get(3));
-		temp.add(nums.get(4));
-		temp.add(nums.get(5));
-		temp.add(nums.get(0));
-		temp.add(nums.get(1));
-		temp.add(nums.get(2));
-		return temp;
+		Vector<String> output = new Vector<String>();
+		output.add(nums.get(3));
+		output.add(nums.get(4));
+		output.add(nums.get(5));
+		output.add(nums.get(0));
+		output.add(nums.get(1));
+		output.add(nums.get(2));
+		return output;
 	}
 }

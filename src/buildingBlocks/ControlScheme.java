@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 /**
  * This class modifies the {@link buildingBlocks.UIV3 UI} according to inputs from a controller.
- * Future subclasses must identify an {@link java.awt.event.ActionListener ActionListener} for autonomous and teleoperated modes. 
+ * Future subclasses must define an {@link java.awt.event.ActionListener ActionListener} for autonomous and teleoperated modes. 
  * @author Grayson Spidle
  *
  */
@@ -42,11 +42,9 @@ public abstract class ControlScheme implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.equals(POLL_AUTONOMOUS_CONTROLS)) {
 			autonomous.actionPerformed(e);
-		}
-		else if (e.equals(POLL_TELEOPERATED_CONTROLS)) {
+		} else if (e.equals(POLL_TELEOPERATED_CONTROLS)) {
 			teleoperated.actionPerformed(e);
-		}
-		else {
+		} else {
 			System.err.println("Unable to obtain the controls. Use the ActionEvents provided by the class.");
 		}
 	}

@@ -1,4 +1,5 @@
 package buildingBlocks.controllerElements;
+
 import static buildingBlocks.controllerElements.ControllerTrigger.LEFT_TRIGGER;
 import static buildingBlocks.controllerElements.ControllerTrigger.RIGHT_TRIGGER;
 
@@ -133,66 +134,82 @@ public class GamepadController extends JController {
 		
 	}
 	
+	@Override
 	public boolean isAPressed() {
 		return a.isPressed();
 	}
 	
+	@Override
 	public boolean isBPressed() {
 		return b.isPressed();
 	}
 	
+	@Override
 	public boolean isXPressed() {
 		return x.isPressed();
 	}
 	
+	@Override
 	public boolean isYPressed() {
 		return y.isPressed();
 	}
 	
+	@Override
 	public boolean isLBPressed() {
 		return lb.isPressed();
 	}
 	
+	@Override
 	public boolean isRBPressed() {
 		return rb.isPressed();
 	}
 	
+	@Override
 	public boolean isLSPressed() {
 		return ls.isPressed();
 	}
 	
+	@Override
 	public boolean isRSPressed() {
 		return rs.isPressed();
 	}
 	
+	@Override
 	public boolean isStartPressed() {
 		return start.isPressed();
 	}
 	
+	@Override
 	public boolean isLTPressed() {
 		return lt.isPressed();
 	}
 	
+	@Override
 	public boolean isRTPressed() {
 		return rt.isPressed();
 	}
 	
+	@Override
 	public boolean isLTHeld() {
 		return lt.isHeld();
 	}
 	
+	@Override
 	public boolean isRTHeld() {
 		return rt.isHeld();
 	}
 	
+	@Override
 	public int getLeftStick() {
 		return leftStick;
 	}
 
+	@Override
 	public int getRightStick() {
 		return rightStick;
 	}
 	
+	@Override
 	public float getDPad() {
 		return dPad;
 	}
